@@ -23,6 +23,7 @@ const Gameboard = () => {
       return arr;
     })(),
     missedShots: [],
+    allShots: [],
     ships: [],
     placeShip(coordX, coordY, length, direction) {
       if (length + coordX > 10 || length + coordY > 10) return;
@@ -35,7 +36,7 @@ const Gameboard = () => {
             : findCoord.call(this, coordX + i, coordY);
         shipCoords.push(coord);
       }
-      if (shipCoords.find((coordObj) => coordObj.ship) == null) {
+      if (shipCoords.some((coordObj) => coordObj.ship) === false) {
         const ship = Ship(length);
         this.ships.push(ship);
         shipCoords.forEach((coord) => {
@@ -52,6 +53,8 @@ const Gameboard = () => {
       coordObj.ship
         ? coordObj.ship.hit(coordObj.shipPos)
         : this.missedShots.push([coordX, coordY]);
+
+      this.allShots.push([coordX, coordY]);
     },
     checkIfAllShipsSunk() {
       const sunkStatus = [];
