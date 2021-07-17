@@ -5,6 +5,12 @@ const Gameboard = () => {
 
   // should be able to report if all ships have been sunk
 
+  function findCoord(coordX, coordY) {
+    return this.board.find(
+      (obj) => coordX === obj.coord[0] && coordY === obj.coord[1]
+    );
+  }
+
   return {
     board: (function createBoardObj() {
       const arr = [];
@@ -16,13 +22,42 @@ const Gameboard = () => {
       }
       return arr;
     })(),
-    placeShip(coordX, coordY, length) {
-      const ship = Ship(length);
+    missedShots: [],
+    ships: [],
+    placeShip(coordX, coordY, length, direction) {
+      if (length + coordX > 10 || length + coordY > 10) return;
+
+      const shipCoords = [];
+      for (let i = 0; i < length; i++) {
+        const coord =
+          direction === 'vertical'
+            ? findCoord.call(this, coordX, coordY + i)
+            : findCoord.call(this, coordX + i, coordY);
+        shipCoords.push(coord);
+      }
+      if (shipCoords.find((coordObj) => coordObj.ship) == null) {
+        const ship = Ship(length);
+        this.ships.push(ship);
+        shipCoords.forEach((coord) => {
+          let j = 0;
+          coord.ship = ship;
+          coord.shipPos = j + 1; // need to add an extra 1 bc i starts at 0
+          j++;
+        });
+        return ship;
+      }
     },
     receiveAttack(coordX, coordY) {
-      // takes coordinates, determines whether attack hit a ship,
-      // sends hit function to correct ship if it hits
-      // records coordinates of the missedd shot
+      const coordObj = findCoord.call(this, coordX, coordY);
+      coordObj.ship
+        ? coordObj.ship.hit(coordObj.shipPos)
+        : this.missedShots.push([coordX, coordY]);
+    },
+    checkIfAllShipsSunk() {
+      const sunkStatus = [];
+      this.ships.forEach((ship) => sunkStatus.push(ship.isSunk()));
+
+      return sunkStatus.every((val) => val === true);
     },
   };
 };
