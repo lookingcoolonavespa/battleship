@@ -14,8 +14,8 @@ const Gameboard = () => {
   return {
     board: (function createBoardObj() {
       const arr = [];
-      for (let xCoord = 1; xCoord < 11; xCoord++) {
-        for (let yCoord = 1; yCoord < 11; yCoord++) {
+      for (let xCoord = 1; xCoord < 9; xCoord++) {
+        for (let yCoord = 1; yCoord < 9; yCoord++) {
           const coord = { coord: [xCoord, yCoord] };
           arr.push(coord);
         }

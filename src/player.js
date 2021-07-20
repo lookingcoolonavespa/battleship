@@ -6,7 +6,12 @@ const Player = () => {
     attack(coordX, coordY, gameboard) {
       gameboard.receiveAttack(coordX, coordY);
     },
-    cpuAttack(gameboard) {
+  };
+};
+
+const CPU = () => {
+  return {
+    attack(gameboard) {
       let coord = generateRandomCoordinates();
       while (
         gameboard.allShots.some(
@@ -29,4 +34,4 @@ const Player = () => {
   };
 };
 
-export default Player;
+export { Player, CPU };
