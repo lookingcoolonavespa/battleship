@@ -15,5 +15,4 @@ const Ship = (length) => {
   };
 };
 
-export { Ship };
 export default Ship;

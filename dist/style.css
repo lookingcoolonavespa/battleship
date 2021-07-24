@@ -1,3 +1,94 @@
+:root {
+  --alert-red: rgb(255, 70, 70);
+}
+
+@font-face {
+  font-family: 'Cutive Mono';
+  src: url(/dist/fonts/CutiveMono-Regular.ttf);
+}
+@font-face {
+  font-family: 'Work Sans Bold';
+  src: url(/dist/fonts/WorkSans-Bold.ttf);
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Cutive Mono';
+}
+section {
+  min-height: 100vh;
+}
+.centered {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.story-text {
+  position: relative;
+  height: 19px;
+}
+.story-text::after {
+  position: absolute;
+  content: '';
+  width: 3px;
+  height: 19px;
+  border-right: 8px solid black;
+}
+.type-anime:after {
+  animation: blink 1000ms linear infinite;
+}
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  49% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.fade-anime {
+  transition: 3s ease-out opacity;
+}
+.alert-title {
+  font-family: 'Work Sans Bold';
+  animation: color-change 2500ms ease-in infinite;
+}
+@keyframes color-change {
+  0% {
+    color: var(--alert-red);
+  }
+  50% {
+    color: white;
+  }
+  100% {
+    color: var(--alert-red);
+  }
+}
+.alert-anime {
+  animation: alert 2500ms ease-in infinite;
+}
+@keyframes alert {
+  0% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: var(--alert-red);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+.hidden {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
 .gameboard {
   display: grid;
   grid-template-columns: repeat(8, 1fr);

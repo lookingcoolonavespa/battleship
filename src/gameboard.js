@@ -1,4 +1,4 @@
-import { Ship } from './ship.js';
+import Ship from './ship.js';
 
 const Gameboard = () => {
   // should keep track of all missed attacks so they can be displayed
@@ -25,7 +25,8 @@ const Gameboard = () => {
     missedShots: [],
     allShots: [],
     ships: [],
-    placeShip(coordX, coordY, length, direction) {
+    placeShip(startCoord, length, direction) {
+      const [coordX, coordY] = startCoord;
       if (length + coordX > 10 || length + coordY > 10) return;
 
       const shipCoords = [];
@@ -36,19 +37,19 @@ const Gameboard = () => {
             : findCoord.call(this, coordX + i, coordY);
         shipCoords.push(coord);
       }
-      if (shipCoords.some((coordObj) => coordObj.ship) === false) {
-        const ship = Ship(length);
-        this.ships.push(ship);
-        shipCoords.forEach((coord) => {
-          let j = 0;
-          coord.ship = ship;
-          coord.shipPos = j + 1; // need to add an extra 1 bc i starts at 0
-          j++;
-        });
-        return ship;
-      }
+      if (shipCoords.some((coordObj) => coordObj.ship) === true) return; // check if there is a ship on any of the coordinates
+      const ship = Ship(length);
+      this.ships.push(ship);
+      shipCoords.forEach((coord) => {
+        let j = 0;
+        coord.ship = ship;
+        coord.shipPos = j + 1;
+        j++;
+      });
+      return ship;
     },
-    receiveAttack(coordX, coordY) {
+    receiveAttack(coord) {
+      const [coordX, coordY] = coord;
       const coordObj = findCoord.call(this, coordX, coordY);
       coordObj.ship
         ? coordObj.ship.hit(coordObj.shipPos)

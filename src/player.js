@@ -3,8 +3,8 @@ const Player = () => {
   // cpu shouldn't be selecting illegal moves
   // cpu should try adjacent coordinates if their moves hits
   return {
-    attack(coordX, coordY, gameboard) {
-      gameboard.receiveAttack(coordX, coordY);
+    attack(gameboard, coord) {
+      gameboard.receiveAttack(coord);
     },
   };
 };
@@ -13,21 +13,24 @@ const CPU = () => {
   return {
     attack(gameboard) {
       let coord = generateRandomCoordinates();
+      if (gameboard.allShots.length === 0) {
+        gameboard.receiveAttack(coord);
+        return coord;
+      }
       while (
         gameboard.allShots.some(
-          (missedShot) =>
-            missedShot[0] === coord[0] && missedShot[1] === coord[1]
+          (illegalMove) =>
+            illegalMove[0] === coord[0] && illegalMove[1] === coord[1]
         )
       ) {
         coord = generateRandomCoordinates();
       }
-      const [coordX, coordY] = coord;
-      gameboard.receiveAttack(coordX, coordY);
+      gameboard.receiveAttack(coord);
       return coord;
 
       function generateRandomCoordinates() {
-        const coordX = Math.floor(Math.random() * 10 + 1);
-        const coordY = Math.floor(Math.random() * 10 + 1);
+        const coordX = Math.floor(Math.random() * 8 + 1);
+        const coordY = Math.floor(Math.random() * 8 + 1);
         return [coordX, coordY];
       }
     },
