@@ -1,10 +1,14 @@
 const audio = (() => {
   return {
-    fadeIn(audio, beginVol = 0, maxVol, interval) {
-      console.log(beginVol);
-      if (beginVol > maxVol || beginVol === maxVol)
+    fadeIn(audio, step, maxVol, interval) {
+      if (audio.volume > maxVol || audio.volume === maxVol)
         return clearInterval(interval);
-      audio.volume = beginVol;
+      audio.volume += step;
+    },
+    fadeOut(audio, step, interval) {
+      if (audio.volume === 0 || audio.volume < 0)
+        return clearInterval(interval);
+      audio.volume -= step;
     },
     typing: new Audio(
       '../dist/audio/medium-pace-Typing-on-mechanical-keyboard-1-www.FesliyanStudios.com.mp3'

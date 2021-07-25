@@ -1,7 +1,5 @@
 import Gameboard from './gameboard.js';
 import { Player, CPU } from './player.js';
-import animate from './animate.js';
-import helpers from './helpers.js';
 import startSeq from './startSeq.js';
 
 const gameLoop = (() => {

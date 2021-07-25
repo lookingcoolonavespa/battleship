@@ -47,10 +47,12 @@ const startSeq = (function () {
         return animate.alert();
       })
       .then(() => {
+        const audioFadeOut = setInterval(() => {
+          audio.fadeOut(audio.alert, 0.05, audioFadeOut);
+        }, 300);
         return animate.fadeOut(alert);
       })
       .then(() => {
-        audio.alert.pause();
         helpers.hide(alert);
         helpers.show(gameplay);
       });

@@ -55,7 +55,7 @@ section {
 .start-btn {
   position: absolute;
   margin-top: 80px;
-  transition: 1s ease-in opacity;
+  transition: 0.5s ease-in opacity;
 }
 .fade-anime {
   transition: 3s ease-out opacity;

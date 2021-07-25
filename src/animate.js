@@ -33,17 +33,16 @@ const animate = (() => ({
   },
   alert() {
     audio.alert.playbackRate = 0.8;
-    let vol = 0;
+    const vol = 0;
     audio.alert.volume = vol;
-    const fadein = setInterval(() => {
-      audio.fadeIn(audio.alert, (vol += 0.05), 0.5, fadein);
-      console.log(vol);
-    }, 400);
+    const fadeInAndOut = setInterval(() => {
+      audio.fadeIn(audio.alert, 0.02, 0.5, fadeInAndOut);
+    }, 200);
     audio.alert.play();
     return new Promise((resolve) => {
       setTimeout(() => {
         return resolve();
-      }, 5500);
+      }, 5800);
     });
   },
 }))();
