@@ -25,7 +25,7 @@ section {
   align-items: center;
 }
 .story-text {
-  position: relative;
+  position: absolute;
   height: 19px;
 }
 .story-text::after {
@@ -51,6 +51,11 @@ section {
   100% {
     opacity: 0;
   }
+}
+.start-btn {
+  position: absolute;
+  margin-top: 80px;
+  transition: 1s ease-in opacity;
 }
 .fade-anime {
   transition: 3s ease-out opacity;
@@ -88,6 +93,7 @@ section {
   position: absolute;
   opacity: 0;
   pointer-events: none;
+  top: 0;
 }
 .gameboard {
   display: grid;

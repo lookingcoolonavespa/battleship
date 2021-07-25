@@ -1,5 +1,6 @@
 import helpers from './helpers.js';
 import animate from './animate.js';
+import audio from './audio.js';
 
 const startSeq = (function () {
   const start = document.getElementById('start');
@@ -7,7 +8,7 @@ const startSeq = (function () {
   const storyPt1 = document.querySelector('.story-text-1');
   const storyPt2 = document.querySelector('.story-text-2');
   const storyPt3 = document.querySelector('.story-text-3');
-  const departBtn = document.querySelector('.depart-btn');
+  const startBtn = document.querySelector('.start-btn');
 
   const alert = document.getElementById('alert');
 
@@ -31,21 +32,28 @@ const startSeq = (function () {
       return animate.typingEffect(storyPt3);
     })
     .then(() => {
-      helpers.show(departBtn);
+      helpers.show(startBtn);
     });
 
-  departBtn.addEventListener('click', startMission);
+  startBtn.addEventListener('click', startMission);
 
   function startMission() {
     start.classList.add('fade-anime');
-    animate.fadeOut(start).then(() => {
-      helpers.hide(start);
-      helpers.show(alert);
-      return animate.alert().then(() => {
+    animate
+      .fadeOut(start)
+      .then(() => {
+        helpers.hide(start);
+        helpers.show(alert);
+        return animate.alert();
+      })
+      .then(() => {
+        return animate.fadeOut(alert);
+      })
+      .then(() => {
+        audio.alert.pause();
         helpers.hide(alert);
         helpers.show(gameplay);
       });
-    });
   }
 })();
 

@@ -20,6 +20,7 @@ const animate = (() => ({
   },
   fadeOut(el) {
     return new Promise((resolve) => {
+      el.classList.add('fade-anime');
       el.style.opacity = '0';
       el.addEventListener('transitionend', transitionEnded);
 
@@ -32,10 +33,17 @@ const animate = (() => ({
   },
   alert() {
     audio.alert.playbackRate = 0.8;
-    audio.alert.volume = 0.3;
+    let vol = 0;
+    audio.alert.volume = vol;
+    const fadein = setInterval(() => {
+      audio.fadeIn(audio.alert, (vol += 0.05), 0.5, fadein);
+      console.log(vol);
+    }, 400);
     audio.alert.play();
     return new Promise((resolve) => {
-      setTimeout(() => resolve(), 6000);
+      setTimeout(() => {
+        return resolve();
+      }, 5500);
     });
   },
 }))();
