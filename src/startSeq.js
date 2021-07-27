@@ -4,6 +4,9 @@ import audio from './audio.js';
 
 const startSeq = (function () {
   const start = document.getElementById('start');
+  const title = start.querySelector('.title');
+  const btnCtn = start.querySelector('.btn-ctn');
+
   const storyPrequel = document.querySelector('.story-text-prequel');
   const storyPt1 = document.querySelector('.story-text-1');
   const storyPt2 = document.querySelector('.story-text-2');
@@ -14,46 +17,46 @@ const startSeq = (function () {
 
   const gameplay = document.getElementById('gameplay');
 
-  animate
-    .typingEffect(storyPrequel)
-    .then(() => {
-      helpers.hide(storyPrequel);
-      helpers.show(storyPt1);
-      return animate.typingEffect(storyPt1);
-    })
-    .then(() => {
-      helpers.hide(storyPt1);
-      helpers.show(storyPt2);
-      return animate.typingEffect(storyPt2);
-    })
-    .then(() => {
-      helpers.hide(storyPt2);
-      helpers.show(storyPt3);
-      return animate.typingEffect(storyPt3);
-    })
-    .then(() => {
-      helpers.show(startBtn);
-    });
-
   startBtn.addEventListener('click', startMission);
 
   function startMission() {
-    start.classList.add('fade-anime');
+    helpers.hide(btnCtn);
     animate
-      .fadeOut(start)
+      .fadeOut(btnCtn, 1)
+      .then(() => {
+        return animate.reverseTyping(title);
+      })
+      .then(() => {
+        helpers.hide(title);
+        helpers.show(storyPt1);
+        return animate.typing(storyPt1);
+      })
+      .then(() => {
+        helpers.hide(storyPt1);
+        helpers.show(storyPt2);
+        return animate.typing(storyPt2);
+      })
+      .then(() => {
+        helpers.hide(storyPt2);
+        helpers.show(storyPt3);
+        return animate.typing(storyPt3);
+      })
+      .then(() => {
+        return animate.fadeOut(start, 3);
+      })
       .then(() => {
         helpers.hide(start);
+        alert.classList.add('fade-anime-3');
         helpers.show(alert);
         return animate.alert();
       })
       .then(() => {
         const audioFadeOut = setInterval(() => {
-          audio.fadeOut(audio.alert, 0.05, audioFadeOut);
-        }, 300);
-        return animate.fadeOut(alert);
+          audio.fadeOut(audio.alert, 0.02, audioFadeOut);
+        }, 50);
+        return animate.fadeOut(alert, 3);
       })
       .then(() => {
-        helpers.hide(alert);
         helpers.show(gameplay);
       });
   }

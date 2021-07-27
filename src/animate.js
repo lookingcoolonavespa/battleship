@@ -1,14 +1,14 @@
 import audio from './audio.js';
 
 const animate = (() => ({
-  typingEffect: function (el) {
+  typing: function (el) {
     let index = 0;
     const str = el.textContent.trim();
     return new Promise((resolve) => {
       (function showNextLetter() {
         const letter = str.slice(0, index++);
-        el.textContent = letter;
         audio.typing.play();
+        el.textContent = letter;
         if (letter.length === str.length) {
           el.classList.add('type-anime');
           audio.typing.pause();
@@ -18,9 +18,29 @@ const animate = (() => ({
       })();
     });
   },
-  fadeOut(el) {
+  reverseTyping: function (el) {
+    const str = el.textContent.trim();
+    let index = str.length - 1;
+    el.classList.remove('type-anime');
+    audio.backspace.playbackRate = 1.5;
     return new Promise((resolve) => {
-      el.classList.add('fade-anime');
+      (function removeNextLetter() {
+        audio.backspace.pause();
+        audio.backspace.currentTime = 0;
+        audio.backspace.play();
+        const remainingWord = str.slice(0, index--);
+        el.textContent = remainingWord;
+        if (remainingWord.length === 0) {
+          el.classList.add('type-anime');
+          return setTimeout(() => resolve(), 2000);
+        }
+        setTimeout(removeNextLetter, 300);
+      })();
+    });
+  },
+  fadeOut: function (el, duration) {
+    return new Promise((resolve) => {
+      el.classList.add(`fade-anime-${duration}`);
       el.style.opacity = '0';
       el.addEventListener('transitionend', transitionEnded);
 
@@ -31,18 +51,18 @@ const animate = (() => ({
       }
     });
   },
-  alert() {
+  alert: function () {
     audio.alert.playbackRate = 0.8;
     const vol = 0;
     audio.alert.volume = vol;
-    const fadeInAndOut = setInterval(() => {
-      audio.fadeIn(audio.alert, 0.02, 0.5, fadeInAndOut);
+    const fadeIn = setInterval(() => {
+      audio.fadeIn(audio.alert, 0.02, 0.4, fadeIn);
     }, 200);
     audio.alert.play();
     return new Promise((resolve) => {
       setTimeout(() => {
         return resolve();
-      }, 5800);
+      }, 6300);
     });
   },
 }))();

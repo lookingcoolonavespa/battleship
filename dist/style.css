@@ -10,10 +10,25 @@
   font-family: 'Work Sans Bold';
   src: url(/dist/fonts/WorkSans-Bold.ttf);
 }
+button {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
 body {
   margin: 0;
   padding: 0;
   font-family: 'Cutive Mono';
+  overflow: hidden;
+}
+body > .sound-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
 }
 section {
   min-height: 100vh;
@@ -24,16 +39,36 @@ section {
   justify-content: center;
   align-items: center;
 }
-.story-text {
+#start .btn-ctn {
   position: absolute;
+  margin-top: 135px;
+  row-gap: 20px;
+}
+.text-btn {
+  padding: 0.25em 0.75em;
+  border: 1px solid black;
+  transition: 0.2s ease-in transform;
+}
+.text-btn:hover {
+  transform: scale(1.1);
+}
+.story-text {
+  position: relative;
+  height: 27px;
+}
+span.story-text {
+  font-size: 16px;
   height: 19px;
 }
 .story-text::after {
   position: absolute;
   content: '';
   width: 3px;
-  height: 19px;
+  height: 27px;
   border-right: 8px solid black;
+}
+span.story-text::after {
+  height: 19px;
 }
 .type-anime:after {
   animation: blink 1000ms linear infinite;
@@ -52,12 +87,10 @@ section {
     opacity: 0;
   }
 }
-.start-btn {
-  position: absolute;
-  margin-top: 80px;
-  transition: 0.5s ease-in opacity;
+.fade-anime-1 {
+  transition: 1s ease-out opacity;
 }
-.fade-anime {
+.fade-anime-3 {
   transition: 3s ease-out opacity;
 }
 .alert-title {
@@ -93,6 +126,8 @@ section {
   position: absolute;
   opacity: 0;
   pointer-events: none;
+}
+section.hidden {
   top: 0;
 }
 .gameboard {
