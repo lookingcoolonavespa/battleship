@@ -5,6 +5,8 @@ const Gameboard = () => {
 
   // should be able to report if all ships have been sunk
 
+  const gameboardSize = 8;
+
   function findCoord(coordX, coordY) {
     return this.board.find(
       (obj) => coordX === obj.coord[0] && coordY === obj.coord[1]
@@ -12,10 +14,11 @@ const Gameboard = () => {
   }
 
   return {
+    size: gameboardSize,
     board: (function createBoardObj() {
       const arr = [];
-      for (let xCoord = 1; xCoord < 9; xCoord++) {
-        for (let yCoord = 1; yCoord < 9; yCoord++) {
+      for (let xCoord = 1; xCoord <= gameboardSize; xCoord++) {
+        for (let yCoord = 1; yCoord <= gameboardSize; yCoord++) {
           const coord = { coord: [xCoord, yCoord] };
           arr.push(coord);
         }
@@ -27,7 +30,11 @@ const Gameboard = () => {
     ships: [],
     placeShip(startCoord, length, direction) {
       const [coordX, coordY] = startCoord;
-      if (length + coordX > 10 || length + coordY > 10) return;
+      if (
+        (length + coordX > gameboardSize && direction === 'x') ||
+        (length + coordY > gameboardSize && direction === 'y')
+      )
+        return;
 
       const shipCoords = [];
       for (let i = 0; i < length; i++) {
@@ -62,6 +69,22 @@ const Gameboard = () => {
       this.ships.forEach((ship) => sunkStatus.push(ship.isSunk()));
 
       return sunkStatus.every((val) => val === true);
+    },
+    generateGameboardEl(ctn) {
+      const gameboardDiv = document.createElement('div');
+      gameboardDiv.classList.add('gameboard');
+
+      for (let i = 1; i < Math.pow(gameboardSize, 2) + 1; i++) {
+        const gridBox = document.createElement('div');
+        gridBox.classList.add('grid-box');
+        gameboardDiv.appendChild(gridBox);
+
+        if (i % gameboardSize === 0) gridBox.classList.add('grid-box-col-8');
+        if (i > gameboardSize ** 2 - gameboardSize)
+          gridBox.classList.add('grid-box-row-8');
+      }
+      ctn.appendChild(gameboardDiv);
+      return gameboardDiv;
     },
   };
 };

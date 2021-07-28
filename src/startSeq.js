@@ -5,25 +5,32 @@ import audio from './audio.js';
 const startSeq = (function () {
   const start = document.getElementById('start');
   const title = start.querySelector('.title');
+  const startBtn = start.querySelector('.start-btn');
   const btnCtn = start.querySelector('.btn-ctn');
 
-  const storyPrequel = document.querySelector('.story-text-prequel');
   const storyPt1 = document.querySelector('.story-text-1');
   const storyPt2 = document.querySelector('.story-text-2');
   const storyPt3 = document.querySelector('.story-text-3');
-  const startBtn = document.querySelector('.start-btn');
 
   const alert = document.getElementById('alert');
 
   const gameplay = document.getElementById('gameplay');
 
+  const soundBtns = document.querySelectorAll('.sound-btn');
+
   startBtn.addEventListener('click', startMission);
+  soundBtns.forEach((btn) =>
+    btn.addEventListener('click', (e) => {
+      turnVol(e);
+      changeVolBtn(e);
+    })
+  );
 
   function startMission() {
-    helpers.hide(btnCtn);
     animate
-      .fadeOut(btnCtn, 1)
+      .fadeOut(startBtn, 1)
       .then(() => {
+        btnCtn.classList.add('sound-only');
         return animate.reverseTyping(title);
       })
       .then(() => {
@@ -52,13 +59,36 @@ const startSeq = (function () {
       })
       .then(() => {
         const audioFadeOut = setInterval(() => {
-          audio.fadeOut(audio.alert, 0.02, audioFadeOut);
-        }, 50);
+          audio.fadeOut(audio.alert, 0.05, audioFadeOut);
+        }, 300);
         return animate.fadeOut(alert, 3);
       })
       .then(() => {
         helpers.show(gameplay);
       });
+  }
+
+  function turnVol(e) {
+    const icon = e.target;
+    const audioKeys = Object.keys(audio);
+    if (icon.classList.contains('fa-volume-up')) {
+      return audioKeys.forEach((key) => {
+        if (typeof audio[key] === 'function') return;
+        audio[key].muted = true;
+      });
+    }
+    audioKeys.forEach((key) => {
+      if (typeof audio[key] === 'function') return;
+      audio[key].muted = false;
+    });
+  }
+  function changeVolBtn() {
+    soundBtns.forEach((btn) => {
+      const icon = btn.querySelector('i');
+      icon.classList.contains('fa-volume-up')
+        ? icon.classList.replace('fa-volume-up', 'fa-volume-mute')
+        : icon.classList.replace('fa-volume-mute', 'fa-volume-up');
+    });
   }
 })();
 

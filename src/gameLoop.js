@@ -1,6 +1,7 @@
 import Gameboard from './gameboard.js';
 import { Player, CPU } from './player.js';
 import startSeq from './startSeq.js';
+import commandCenter from './commandCenter.js';
 
 const gameLoop = (() => {
   // needs to guide user to starting game
@@ -10,17 +11,6 @@ const gameLoop = (() => {
 
   return {
     state: { currentGame: null },
-    generatePlayableGameboard(ctn) {
-      const gameboardDiv = document.createElement('div');
-      gameboardDiv.classList.add('gameboard');
-
-      for (let i = 0; i < Math.pow(8, 2); i++) {
-        const gridBox = document.createElement('div');
-        gridBox.classList.add('grid-box');
-        gameboardDiv.appendChild(gridBox);
-      }
-      ctn.appendChild(gameboardDiv);
-    },
     startNewGame(opp) {
       const newGame = {};
       const playerObj = {

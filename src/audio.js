@@ -6,10 +6,6 @@ const audio = (() => {
       audio.volume += step;
     },
     fadeOut(audio, step, interval) {
-      console.log(
-        audio.volume,
-        audio.volume === 0 || audio.volume < 0 || audio.volume - step < 0
-      );
       if (audio.volume === 0 || audio.volume < 0 || audio.volume - step < 0) {
         audio.pause();
         return clearInterval(interval);

@@ -10,16 +10,12 @@
     <title>Battleships</title>
   </head>
   <body>
-    <button class="btn sound-btn hidden">
-      <i class="fas fa-volume-up"></i>
-    </button>
-    <section id="start" class="centered">
+    <section id="start" class="centered hidden">
       <h1 class="title story-text type-anime">Battleship</h1>
       <div class="btn-ctn centered">
         <button class="btn text-btn start-btn">Start game</button>
         <button class="btn sound-btn"><i class="fas fa-volume-up"></i></button>
       </div>
-      <span class="story-text story-text-prequel type-anime hidden"></span>
       <span class="story-text story-text-1 hidden">
         Hostile ships have been spotted 200 miles off the coastline</span
       >
@@ -29,8 +25,15 @@
     <section id="alert" class="alert-anime hidden centered">
       <h2 class="alert-title">WARNING</h2>
       <p>Enemy ships approaching</p>
+      <div class="btn-ctn centered">
+        <button class="btn sound-btn"><i class="fas fa-volume-up"></i></button>
+      </div>
     </section>
-    <
+    <section id="command-center" class="centered">
+      <div class="instructions">
+        Admiral, place your <span id="ship-name"></span>
+      </div>
+    </section>
     <section id="gameplay" class="hidden">
       <!-- <div class="game-section game-section-player">
         <div class="gameboard"></div>

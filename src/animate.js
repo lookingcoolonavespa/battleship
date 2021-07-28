@@ -62,7 +62,7 @@ const animate = (() => ({
     return new Promise((resolve) => {
       setTimeout(() => {
         return resolve();
-      }, 6300);
+      }, 6500);
     });
   },
 }))();
