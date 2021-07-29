@@ -1,5 +1,7 @@
 :root {
   --alert-red: rgb(255, 70, 70);
+  --gameboard-size: 10;
+  --grid-box-size: 35px;
 }
 
 @font-face {
@@ -134,18 +136,18 @@ span.story-text::after {
 }
 .gameboard {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  grid-template-rows: repeat(8, 1fr);
+  grid-template-columns: repeat(var(--gameboard-size), 1fr);
+  grid-template-rows: repeat(var(--gameboard-size), 1fr);
   row-gap: 0;
   column-gap: 0;
-  width: 408px;
-  height: 408px;
+  width: calc(var(--gameboard-size) * var(--grid-box-size));
+  height: calc(var(--gameboard-size) * var(--grid-box-size));
 }
 .grid-box {
   border-top: 1px solid black;
   border-left: 1px solid black;
-  width: 50px;
-  height: 50px;
+  width: var(--grid-box-size);
+  height: var(--grid-box-size);
 }
 .grid-box-col-8 {
   border-right: 1px solid black;
@@ -155,6 +157,9 @@ span.story-text::after {
 }
 .grid-box-shipline {
   background-color: black;
+}
+.grid-box-ship {
+  background-color: red;
 }
 .hidden {
   position: absolute;
