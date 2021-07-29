@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="icons/css/all.css" />
-    <script type="module" src="../src/gameLoop.js"></script>
+    <script type="module" src="../src/index.js"></script>
     <title>Battleships</title>
   </head>
   <body>
@@ -30,9 +30,12 @@
       </div>
     </section>
     <section id="command-center" class="centered">
-      <div class="instructions">
-        Admiral, place your <span id="ship-name"></span>
-      </div>
+      <span class="instructions">
+        Admiral, place your <span id="ship-name" class="story-text"></span>
+      </span>
+      <button class="btn text-btn axis-btn">
+        Axis : <span id="axis-text">X</span>
+      </button>
     </section>
     <section id="gameplay" class="hidden">
       <!-- <div class="game-section game-section-player">

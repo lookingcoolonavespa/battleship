@@ -18,78 +18,66 @@ const startSeq = (function () {
 
   const soundBtns = document.querySelectorAll('.sound-btn');
 
-  startBtn.addEventListener('click', startMission);
-  soundBtns.forEach((btn) =>
-    btn.addEventListener('click', (e) => {
-      turnVol(e);
-      changeVolBtn(e);
-    })
-  );
-
-  function startMission() {
-    animate
-      .fadeOut(startBtn, 1)
-      .then(() => {
-        btnCtn.classList.add('sound-only');
-        return animate.reverseTyping(title);
-      })
-      .then(() => {
-        helpers.hide(title);
-        helpers.show(storyPt1);
-        return animate.typing(storyPt1);
-      })
-      .then(() => {
-        helpers.hide(storyPt1);
-        helpers.show(storyPt2);
-        return animate.typing(storyPt2);
-      })
-      .then(() => {
-        helpers.hide(storyPt2);
-        helpers.show(storyPt3);
-        return animate.typing(storyPt3);
-      })
-      .then(() => {
-        return animate.fadeOut(start, 3);
-      })
-      .then(() => {
-        helpers.hide(start);
-        alert.classList.add('fade-anime-3');
-        helpers.show(alert);
-        return animate.alert();
-      })
-      .then(() => {
-        const audioFadeOut = setInterval(() => {
-          audio.fadeOut(audio.alert, 0.05, audioFadeOut);
-        }, 300);
-        return animate.fadeOut(alert, 3);
-      })
-      .then(() => {
-        helpers.show(gameplay);
+  return {
+    startBtn,
+    soundBtns,
+    startMission() {
+      animate
+        .fadeOut(startBtn, 1)
+        .then(() => {
+          btnCtn.classList.add('sound-only');
+          return animate.reverseTyping(title);
+        })
+        .then(() => {
+          helpers.hide(title);
+          helpers.show(storyPt1);
+          return animate.typing(storyPt1);
+        })
+        .then(() => {
+          helpers.hide(storyPt1);
+          helpers.show(storyPt2);
+          return animate.typing(storyPt2);
+        })
+        .then(() => {
+          helpers.hide(storyPt2);
+          helpers.show(storyPt3);
+          return animate.typing(storyPt3);
+        })
+        .then(() => {
+          return animate.fadeOut(start, 3);
+        })
+        .then(() => {
+          helpers.hide(start);
+          alert.classList.add('fade-anime-3');
+          helpers.show(alert);
+          return animate.alert();
+        })
+        .then(() => {
+          const audioFadeOut = setInterval(() => {
+            audio.fadeOut(audio.alert, 0.05, audioFadeOut);
+          }, 300);
+          return animate.fadeOut(alert, 3);
+        })
+        .then(() => {
+          helpers.show(gameplay);
+        });
+    },
+    turnVol(e) {
+      const icon = e.target;
+      if (icon.classList.contains('fa-volume-up')) {
+        return audio.muteAll();
+      }
+      audio.unmuteAll();
+    },
+    changeVolBtn() {
+      soundBtns.forEach((btn) => {
+        const icon = btn.querySelector('i');
+        icon.classList.contains('fa-volume-up')
+          ? icon.classList.replace('fa-volume-up', 'fa-volume-mute')
+          : icon.classList.replace('fa-volume-mute', 'fa-volume-up');
       });
-  }
-
-  function turnVol(e) {
-    const icon = e.target;
-    const audioKeys = Object.keys(audio);
-    if (icon.classList.contains('fa-volume-up')) {
-      return audioKeys.forEach((key) => {
-        if (typeof audio[key] === 'function') return;
-        audio[key].muted = true;
-      });
-    }
-    audioKeys.forEach((key) => {
-      if (typeof audio[key] === 'function') return;
-      audio[key].muted = false;
-    });
-  }
-  function changeVolBtn() {
-    soundBtns.forEach((btn) => {
-      const icon = btn.querySelector('i');
-      icon.classList.contains('fa-volume-up')
-        ? icon.classList.replace('fa-volume-up', 'fa-volume-mute')
-        : icon.classList.replace('fa-volume-mute', 'fa-volume-up');
-    });
-  }
+    },
+  };
 })();
 
 export default startSeq;

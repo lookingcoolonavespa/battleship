@@ -134,6 +134,12 @@ span.story-text::after {
 #alert .btn-ctn {
   margin-top: 185px;
 }
+#command-center {
+  row-gap: 20px;
+}
+.axis-btn {
+  margin-bottom: 10px;
+}
 .gameboard {
   display: grid;
   grid-template-columns: repeat(var(--gameboard-size), 1fr);
@@ -159,6 +165,9 @@ span.story-text::after {
   background-color: black;
 }
 .grid-box-ship {
+  background-color: green;
+}
+.grid-box-error {
   background-color: red;
 }
 .hidden {
