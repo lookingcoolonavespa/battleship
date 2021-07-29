@@ -6,7 +6,7 @@ const commandCenter = (() => {
   const map = playerGameboard.generateGameboardEl(ctn);
   const shipNameEl = ctn.querySelector('#ship-name');
 
-  const direction = 'x';
+  const direction = 'y';
 
   placeShip('carrier', 5, map);
   function placeShip(name, length, gameboard) {
@@ -22,9 +22,16 @@ const commandCenter = (() => {
         (gridBox) => gridBox === e.target
       );
       if (direction === 'y') {
-        // const howCloseStartIsFromColumnEnd =
+        const howCloseStartIsFromColumnEnd =
+          (playerGameboard.size ** 2 - // need to figure out the index of the bottom most gridBox in that column
+            playerGameboard.size +
+            (shiplineStart % 8) -
+            (shiplineStart + (length - 1) * playerGameboard.size)) / // this calculates the end of the shipline
+          playerGameboard.size; // need to divide by column length to see how many rows left to get to the bottom
+        if (howCloseStartIsFromColumnEnd < 0)
+          shiplineStart += howCloseStartIsFromColumnEnd * 8;
         const shiplineCoords = [shiplineStart];
-        for (let i = 0; i < length; i++) {
+        for (let i = 0; i < length - 1; i++) {
           const shipCoord = shiplineCoords[i] + playerGameboard.size;
           shiplineCoords.push(shipCoord);
         }
