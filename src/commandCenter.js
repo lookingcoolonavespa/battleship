@@ -33,22 +33,50 @@ const commandCenter = (() => {
     ctn,
     state,
     shipList,
-    map,
     axisBtn,
     playerGameboard,
-    placeShipSeq(name, length, gameboard) {
-      if (shipNameEl.textContent) audio.backspace.play();
-      shipNameEl.textContent = '';
-      setTimeout(() => {
-        shipNameEl.textContent = name;
-        animate.typing(shipNameEl);
-      }, 300);
+    placeShipSeq(name, length) {
+      const gridBoxes = [...map.querySelectorAll('.grid-box')];
 
-      const gridBoxes = [...gameboard.querySelectorAll('.grid-box')];
-      gridBoxes.forEach((gridBox) => {
-        gridBox.onmouseover = (e) => shipline('show', e);
-        gridBox.onmouseleave = (e) => shipline('hide', e);
-        gridBox.onclick = (e) => placeShip.call(this, e);
+      return new Promise((resolve) => {
+        if (shipNameEl.textContent) audio.backspace.play();
+        shipNameEl.textContent = '';
+        setTimeout(() => {
+          shipNameEl.textContent = name;
+          animate.typing(shipNameEl);
+        }, 300);
+
+        gridBoxes.forEach((gridBox) => {
+          gridBox.onmouseover = (e) => shipline('show', e);
+          gridBox.onmouseleave = (e) => shipline('hide', e);
+          gridBox.onclick = (e) => placeShip.call(this, e);
+        });
+
+        function placeShip(e) {
+          const shiplineStart = gridBoxes.findIndex(
+            (gridBox) => gridBox === e.target
+          );
+          const shiplineIndexes = figureOutShipline(shiplineStart);
+          if (
+            shiplineIndexes.some((index) =>
+              gridBoxes[index].classList.contains('grid-box-error')
+            )
+          )
+            return;
+
+          shiplineIndexes.forEach((index) =>
+            gridBoxes[index].classList.add('grid-box-ship')
+          );
+
+          const shipStartCoord = playerGameboard.board[shiplineStart].coord;
+          playerGameboard.placeShip(
+            shipStartCoord,
+            length,
+            state.axis.toLowerCase()
+          );
+
+          resolve();
+        }
       });
 
       function shipline(visibility, e) {
@@ -72,48 +100,6 @@ const commandCenter = (() => {
           )
             gridBoxes[index].classList.add('grid-box-error');
         });
-      }
-      function placeShip(e) {
-        const shiplineStart = gridBoxes.findIndex(
-          (gridBox) => gridBox === e.target
-        );
-        const shiplineIndexes = figureOutShipline(shiplineStart);
-        if (
-          shiplineIndexes.some((index) =>
-            gridBoxes[index].classList.contains('grid-box-error')
-          )
-        )
-          return;
-
-        shiplineIndexes.forEach((index) =>
-          gridBoxes[index].classList.add('grid-box-ship')
-        );
-
-        const shipStartCoord = playerGameboard.board[shiplineStart].coord;
-        playerGameboard.placeShip(
-          shipStartCoord,
-          length,
-          state.axis.toLowerCase()
-        );
-
-        state.iterator++;
-        if (state.iterator < shipList.length) {
-          return this.placeShipSeq(
-            shipList[state.iterator].name,
-            shipList[state.iterator].length,
-            map
-          );
-        }
-
-        gridBoxes.forEach((gridBox) => {
-          gridBox.onmouseover = '';
-          gridBox.onmouseleave = '';
-          gridBox.onclick = '';
-        });
-        instructions.textContent =
-          'Admiral, all ships deployed. Preparing to engage the enemy';
-        instructions.classList.add('story-text');
-        animate.typing(instructions);
       }
 
       function figureOutShipline(startIndex) {
@@ -172,6 +158,19 @@ const commandCenter = (() => {
         shipList[state.iterator].length,
         map
       );
+    },
+    onAllShipsDeployed() {
+      const gridBoxes = [...map.querySelectorAll('.grid-box')];
+      gridBoxes.forEach((gridBox) => {
+        gridBox.onmouseover = '';
+        gridBox.onmouseleave = '';
+        gridBox.onclick = '';
+      });
+
+      instructions.textContent =
+        'Admiral, all ships deployed. Preparing to engage the enemy';
+      instructions.classList.add('story-text');
+      return animate.typing(instructions);
     },
   };
 })();

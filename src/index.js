@@ -15,8 +15,7 @@ startSeq.startBtn.addEventListener('click', () => {
     .then(() => {
       cc.placeShipSeq(
         cc.shipList[cc.state.iterator].name,
-        cc.shipList[cc.state.iterator].length,
-        cc.map
+        cc.shipList[cc.state.iterator].length
       );
     });
 });
@@ -29,8 +28,10 @@ startSeq.soundBtns.forEach((btn) =>
 
 // commandCenter events
 cc.axisBtn.addEventListener('click', cc.changeAxis);
-// cc.placeShipSeq(
-//   cc.shipList[cc.state.iterator].name,
-//   cc.shipList[cc.state.iterator].length,
-//   cc.map
-// );
+cc.placeShipSeq('carrier', 5)
+  .then(() => cc.placeShipSeq('battleship', 4))
+  .then(() => cc.placeShipSeq('cruiser', 3))
+  .then(() => cc.placeShipSeq('submarine', 3))
+  .then(() => cc.placeShipSeq('patrol boat', 2))
+  .then(() => cc.onAllShipsDeployed())
+  .then(() => helpers.hide(cc.ctn));
