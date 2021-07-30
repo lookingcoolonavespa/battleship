@@ -1,7 +1,5 @@
 import Gameboard from './gameboard.js';
 import { Player, CPU } from './player.js';
-import startSeq from './startSeq.js';
-import commandCenter from './commandCenter.js';
 
 const gameLoop = (() => {
   // needs to guide user to starting game

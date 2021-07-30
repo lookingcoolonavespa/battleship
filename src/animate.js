@@ -51,6 +51,19 @@ const animate = (() => ({
       }
     });
   },
+  fadeIn: function (el, duration) {
+    return new Promise((resolve) => {
+      el.classList.add(`fade-anime-${duration}`);
+      el.style.opacity = '1';
+      el.addEventListener('transitionend', transitionEnded);
+
+      function transitionEnded(e) {
+        if (e.propertyName !== 'opacity') return;
+        el.removeEventListener('transitionend', transitionEnded);
+        resolve();
+      }
+    });
+  },
   alert: function () {
     audio.alert.playbackRate = 0.8;
     const vol = 0;
@@ -62,7 +75,7 @@ const animate = (() => ({
     return new Promise((resolve) => {
       setTimeout(() => {
         return resolve();
-      }, 6500);
+      }, 6000);
     });
   },
 }))();

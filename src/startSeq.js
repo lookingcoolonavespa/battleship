@@ -14,15 +14,13 @@ const startSeq = (function () {
 
   const alert = document.getElementById('alert');
 
-  const gameplay = document.getElementById('gameplay');
-
   const soundBtns = document.querySelectorAll('.sound-btn');
 
   return {
     startBtn,
     soundBtns,
     startMission() {
-      animate
+      return animate
         .fadeOut(startBtn, 1)
         .then(() => {
           btnCtn.classList.add('sound-only');
@@ -59,7 +57,7 @@ const startSeq = (function () {
           return animate.fadeOut(alert, 3);
         })
         .then(() => {
-          helpers.show(gameplay);
+          helpers.hide(alert);
         });
     },
     turnVol(e) {

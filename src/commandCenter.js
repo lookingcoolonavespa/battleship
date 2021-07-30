@@ -1,5 +1,6 @@
 import Gameboard from './gameboard.js';
 import animate from './animate.js';
+import audio from './audio.js';
 
 const commandCenter = (() => {
   const ctn = document.getElementById('command-center');
@@ -29,22 +30,28 @@ const commandCenter = (() => {
   }
 
   return {
+    ctn,
     state,
     shipList,
     map,
     axisBtn,
     playerGameboard,
     placeShipSeq(name, length, gameboard) {
-      shipNameEl.textContent = name;
-      animate.typing(shipNameEl);
+      if (shipNameEl.textContent) audio.backspace.play();
+      shipNameEl.textContent = '';
+      setTimeout(() => {
+        shipNameEl.textContent = name;
+        animate.typing(shipNameEl);
+      }, 300);
+
       const gridBoxes = [...gameboard.querySelectorAll('.grid-box')];
       gridBoxes.forEach((gridBox) => {
-        gridBox.onmouseover = (e) => shipline(e, 'show');
-        gridBox.onmouseleave = (e) => shipline(e, 'hide');
+        gridBox.onmouseover = (e) => shipline('show', e);
+        gridBox.onmouseleave = (e) => shipline('hide', e);
         gridBox.onclick = (e) => placeShip.call(this, e);
       });
 
-      function shipline(e, visibility) {
+      function shipline(visibility, e) {
         const shiplineStart = gridBoxes.findIndex(
           (gridBox) => gridBox === e.target
         );
@@ -97,6 +104,7 @@ const commandCenter = (() => {
             map
           );
         }
+
         gridBoxes.forEach((gridBox) => {
           gridBox.onmouseover = '';
           gridBox.onmouseleave = '';
