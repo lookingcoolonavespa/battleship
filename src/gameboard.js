@@ -28,6 +28,22 @@ const Gameboard = () => {
     missedShots: [],
     allShots: [],
     ships: [],
+    div: (function generateGameboardEl() {
+      const gameboardDiv = document.createElement('div');
+      gameboardDiv.classList.add('gameboard');
+
+      for (let i = 1; i < Math.pow(gameboardSize, 2) + 1; i++) {
+        const gridBox = document.createElement('div');
+        gridBox.classList.add('grid-box');
+        gameboardDiv.appendChild(gridBox);
+
+        if (i % gameboardSize === 0) gridBox.classList.add('grid-box-col-8'); // if gridbox is in the last column
+        if (i > gameboardSize ** 2 - gameboardSize)
+          // if gridbox is in the last row
+          gridBox.classList.add('grid-box-row-8');
+      }
+      return gameboardDiv;
+    })(),
     placeShip(startCoord, length, direction) {
       const [coordX, coordY] = startCoord;
       if (
@@ -69,23 +85,6 @@ const Gameboard = () => {
       this.ships.forEach((ship) => sunkStatus.push(ship.isSunk()));
 
       return sunkStatus.every((val) => val === true);
-    },
-    generateGameboardEl(ctn) {
-      const gameboardDiv = document.createElement('div');
-      gameboardDiv.classList.add('gameboard');
-
-      for (let i = 1; i < Math.pow(gameboardSize, 2) + 1; i++) {
-        const gridBox = document.createElement('div');
-        gridBox.classList.add('grid-box');
-        gameboardDiv.appendChild(gridBox);
-
-        if (i % gameboardSize === 0) gridBox.classList.add('grid-box-col-8'); // if gridbox is in the last column
-        if (i > gameboardSize ** 2 - gameboardSize)
-          // if gridbox is in the last row
-          gridBox.classList.add('grid-box-row-8');
-      }
-      ctn.appendChild(gameboardDiv);
-      return gameboardDiv;
     },
   };
 };

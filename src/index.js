@@ -12,13 +12,8 @@ startSeq.startBtn.addEventListener('click', () => {
       helpers.show(cc.ctn);
       return animate.fadeIn(cc.ctn, 1);
     })
-    .then(() => {
-      cc.placeShipSeq(
-        cc.shipList[cc.state.iterator].name,
-        cc.shipList[cc.state.iterator].length,
-        cc.map
-      );
-    });
+    .then(() => cc.placeShipSeq())
+    .then(() => console.log('hi'));
 });
 startSeq.soundBtns.forEach((btn) =>
   btn.addEventListener('click', (e) => {
@@ -29,8 +24,3 @@ startSeq.soundBtns.forEach((btn) =>
 
 // commandCenter events
 cc.axisBtn.addEventListener('click', cc.changeAxis);
-// cc.placeShipSeq(
-//   cc.shipList[cc.state.iterator].name,
-//   cc.shipList[cc.state.iterator].length,
-//   cc.map
-// );

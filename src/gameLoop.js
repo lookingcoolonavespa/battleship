@@ -2,10 +2,7 @@ import Gameboard from './gameboard.js';
 import { Player, CPU } from './player.js';
 
 const gameLoop = (() => {
-  // needs to guide user to starting game
-  // user selects opponent: another player or cpu
-  // once user makes selection, create gameboards and player objs
-  // where the eventlisteners belong
+  const ctn = document.getElementById('gameplay');
 
   return {
     state: { currentGame: null },
