@@ -36,6 +36,8 @@ const gameplay = (() => {
                 actions: Player(),
                 gameboard: Gameboard(),
               };
+
+        if (opp === 'cpu') playerTwo.gameboard.placeShipsRandom();
         newGame.playerOne = playerOne;
         newGame.playerTwo = playerTwo;
         const turn = newGame.playerOne;
@@ -79,7 +81,11 @@ const gameplay = (() => {
           coord
         );
         setTimeout(() => {
-          result === 'hit' ? onHit(coordIndex) : onMiss(coordIndex);
+          result === 'hit'
+            ? onHit(coordIndex)
+            : result === 'miss'
+            ? onMiss(coordIndex)
+            : onSunk(coordIndex);
           display(result);
           radarLine.className = '';
         }, 2000);
@@ -102,6 +108,7 @@ const gameplay = (() => {
           ];
         gridBox.classList.add('grid-box-miss');
       }
+      function onSunk(coordIndex) {}
     },
   };
 })();

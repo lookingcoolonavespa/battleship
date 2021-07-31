@@ -77,25 +77,20 @@ const Gameboard = () => {
         (length + coordX > gameboardSize && direction === 'x') ||
         (length + coordY > gameboardSize && direction === 'y')
       )
-        return;
+        return null;
 
       const shipCoords = [];
       for (let i = 0; i < length; i++) {
         const coord =
-          direction === 'vertical'
+          direction === 'y'
             ? findCoord.call(this, coordX, coordY + i)
             : findCoord.call(this, coordX + i, coordY);
         shipCoords.push(coord);
       }
-      if (shipCoords.some((coordObj) => coordObj.ship) === true) return; // check if there is a ship on any of the coordinates
+      if (shipCoords.some((coordObj) => coordObj.ship) === true) return null; // check if there is a ship on any of the coordinates
       const ship = Ship(length);
       this.ships.push(ship);
-      shipCoords.forEach((coord) => {
-        let j = 0;
-        coord.ship = ship;
-        coord.shipPos = j + 1;
-        j++;
-      });
+      shipCoords.forEach((coord) => (coord.ship = ship));
       return ship;
     },
     receiveAttack(coord) {
@@ -103,8 +98,12 @@ const Gameboard = () => {
       this.allShots.push([coordX, coordY]);
       const coordObj = findCoord.call(this, coordX, coordY);
 
-      const result = coordObj.ship ? 'hit' : 'miss';
-      if (result === 'hit') coordObj.ship.hit(coordObj.shipPos);
+      let result = coordObj.ship ? 'hit' : 'miss';
+      if (result === 'hit') {
+        coordObj.ship.hit(coordObj.coord);
+      }
+      if (result === 'hit' && coordObj.ship.isSunk()) result = 'sunk';
+
       if (result === 'miss') this.missedShots.push(coord);
       return { result, coordIndex: findCoordIndex.call(this, coordX, coordY) };
     },
@@ -113,6 +112,28 @@ const Gameboard = () => {
       this.ships.forEach((ship) => sunkStatus.push(ship.isSunk()));
 
       return sunkStatus.every((val) => val === true);
+    },
+    placeShipsRandom() {
+      this.shipList.forEach((ship) => {
+        let rdmCoord = generateRdmCoord();
+        let rdmDirection = generateRdmDirection();
+        while (this.placeShip(rdmCoord, ship.length, rdmDirection) === null) {
+          rdmCoord = generateRdmCoord();
+          rdmDirection = generateRdmDirection();
+        }
+
+        function generateRdmCoord() {
+          const coordX = Math.floor(Math.random() * 9) + 1;
+          const coordY = Math.floor(Math.random() * 9) + 1;
+          return [coordX, coordY];
+        }
+        function generateRdmDirection() {
+          const directions = ['x', 'y'];
+          const rdmDirection =
+            directions[Math.floor(Math.random() * directions.length)];
+          return rdmDirection;
+        }
+      });
     },
   };
 };

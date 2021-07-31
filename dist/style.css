@@ -259,12 +259,13 @@ span.story-text::after {
   background-color: red;
 }
 .grid-box-hit:before {
-  content: '\f276';
-  transform: translateX(-50%) translateY(-70%);
+  content: '\f192';
+  font-weight: 400;
+  transform: translateX(-50%) translateY(-50%);
 }
 .grid-box-miss:before {
   content: '\f057';
-  transform: translateX(-50%) translateY(-60%);
+  transform: translateX(-50%) translateY(-50%);
 }
 .hidden {
   position: absolute;
