@@ -47,36 +47,59 @@ const gameplay = (() => {
       return newGame;
     },
 
-    onBoardClick(game, coord, gridBox) {
+    onBoardClick(game, coord) {
       const currentTurn = game.state.turn;
       const opposingTurn =
         game.state.turn === game.playerOne ? game.playerTwo : game.playerOne;
+      const oppGameboardDiv = opposingTurn.gameboard.div;
 
       handlePlayerTurn();
       if (game.opp === 'cpu') return setTimeout(handleCpuTurn, 5000);
 
       function handlePlayerTurn() {
-        game.playerTwo.gameboard.div.style.pointerEvents = 'none';
-        display('sending missle');
-        const result = currentTurn.actions.attack(
-          opposingTurn.gameboard,
-          coord
-        );
-        result === 'hit' ? onHit() : onMiss();
-        setTimeout(() => display(result), 2000);
+        oppGameboardDiv.style.pointerEvents = 'none';
+        runMissleSeq(currentTurn, opposingTurn.gameboard);
+        game.state.turn = opposingTurn;
       }
 
       function handleCpuTurn() {
-        display('missle incoming');
-        const result = game.playerTwo.actions.attack(currentTurn.gameboard);
-        display(result);
-        game.playerTwo.gameboard.div.style.pointerEvents = 'all';
+        runMissleSeq(game.state.turn, game.playerOne.gameboard);
+        oppGameboardDiv.style.pointerEvents = 'all';
+        game.state.turn = game.playerOne;
       }
 
-      function onHit() {
+      function runMissleSeq(currentTurn, oppGameboard) {
+        game.state.turn === game.playerTwo && game.opp === 'cpu'
+          ? display('missile incoming')
+          : display('sending missile');
+        const radarLine = oppGameboard.div.querySelector('li');
+        radarLine.className = 'radar-line';
+        const { result, coordIndex } = currentTurn.actions.attack(
+          opposingTurn.gameboard,
+          coord
+        );
+        setTimeout(() => {
+          result === 'hit' ? onHit(coordIndex) : onMiss(coordIndex);
+          display(result);
+          radarLine.className = '';
+        }, 2000);
+      }
+
+      function onHit(coordIndex) {
+        const gridBox =
+          game.state.turn.gameboard.div.querySelectorAll('.grid-box')[
+            coordIndex
+          ];
         gridBox.classList.add('grid-box-hit');
       }
-      function onMiss() {
+      function onMiss(coordIndex) {
+        console.log(
+          game.state.turn.gameboard.div.querySelectorAll('.grid-box')[0]
+        );
+        const gridBox =
+          game.state.turn.gameboard.div.querySelectorAll('.grid-box')[
+            coordIndex
+          ];
         gridBox.classList.add('grid-box-miss');
       }
     },

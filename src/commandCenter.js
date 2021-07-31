@@ -16,24 +16,11 @@ const commandCenter = (() => {
     axis: axisText.textContent,
   };
 
-  const shipList = [];
-  createShipListItem('carrier', 5);
-  createShipListItem('battleship', 4);
-  createShipListItem('cruiser', 3);
-  createShipListItem('submarine', 3);
-  createShipListItem('patrol boat', 2);
-  function createShipListItem(name, length) {
-    const listObj = {};
-    listObj.name = name;
-    listObj.length = length;
-    shipList.push(listObj);
-  }
-
   return {
     ctn,
     axisBtn,
     playerGameboard,
-    placeShipSeq(iterator = 0) {
+    placeShipSeq(shipList, iterator = 0) {
       const gridBoxes = [...map.querySelectorAll('.grid-box')];
       return new Promise((resolve) => {
         iterator < 5

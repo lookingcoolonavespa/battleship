@@ -13,7 +13,7 @@ startSeq.startBtn.addEventListener('click', () => {
       helpers.show(cc.ctn);
       return animate.fadeIn(cc.ctn, 1);
     })
-    .then(() => cc.placeShipSeq())
+    .then(() => cc.placeShipSeq(cc.playerGameboard.shipList))
     .then(() => console.log('hi'));
 });
 startSeq.soundBtns.forEach((btn) =>
@@ -23,6 +23,13 @@ startSeq.soundBtns.forEach((btn) =>
   })
 );
 
+startSeq.quickStartBtn.addEventListener('click', () => {
+  helpers.show(cc.ctn);
+  animate
+    .fadeIn(cc.ctn, 1)
+    .then(() => cc.placeShipSeq(cc.playerGameboard.shipList))
+    .then(() => console.log('hi'));
+});
 // commandCenter events
 cc.axisBtn.addEventListener('click', cc.changeAxis);
 

@@ -2,6 +2,7 @@
   --alert-red: rgb(255, 70, 70);
   --gameboard-size: 10;
   --grid-box-size: 35px;
+  --grid-box-borders: calc((var(--gameboard-size) * 1px + 1px));
 }
 
 @font-face {
@@ -167,13 +168,65 @@ span.story-text::after {
   align-items: center;
 }
 .gameboard {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(var(--gameboard-size), 1fr);
   grid-template-rows: repeat(var(--gameboard-size), 1fr);
   row-gap: 0;
   column-gap: 0;
-  width: calc(var(--gameboard-size) * var(--grid-box-size));
-  height: calc(var(--gameboard-size) * var(--grid-box-size));
+  width: calc(
+    (var(--grid-box-size) * var(--gameboard-size)) + var(--grid-box-borders)
+  );
+  height: calc(
+    (var(--gameboard-size) * var(--grid-box-size)) + var(--grid-box-borders)
+  );
+  overflow: hidden;
+}
+.radar {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(
+    (var(--grid-box-size) * 1.5 * var(--gameboard-size)) +
+      var(--grid-box-borders)
+  );
+  height: calc(
+    (var(--grid-box-size) * 1.5 * var(--gameboard-size)) +
+      var(--grid-box-borders)
+  );
+  border-radius: 50%;
+  overflow: hidden;
+  pointer-events: none;
+}
+.radar-line {
+  position: absolute;
+  list-style: none;
+  top: 50%;
+  left: 50%;
+  width: calc(
+    (
+        (var(--grid-box-size) * 1.5 * var(--gameboard-size)) +
+          var(--grid-box-borders)
+      ) / 2
+  );
+  height: calc(
+    (
+        (var(--grid-box-size) * 1.5 * var(--gameboard-size)) +
+          var(--grid-box-borders)
+      ) / 2
+  );
+  transform-origin: top left;
+  background: linear-gradient(45deg, #05a1b9 0%, transparent 50%);
+  animation: radar 3s linear infinite;
+}
+@keyframes radar {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 .grid-box {
   position: relative;

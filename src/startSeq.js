@@ -6,6 +6,7 @@ const startSeq = (function () {
   const start = document.getElementById('start');
   const title = start.querySelector('.title');
   const startBtn = start.querySelector('.start-btn');
+  const quickStartBtn = start.querySelector('.quick-start-btn');
   const btnCtn = start.querySelector('.btn-ctn');
 
   const storyPt1 = document.querySelector('.story-text-1');
@@ -18,6 +19,7 @@ const startSeq = (function () {
 
   return {
     startBtn,
+    quickStartBtn,
     soundBtns,
     startMission() {
       return animate

@@ -8,8 +8,27 @@ const Gameboard = () => {
       (obj) => coordX === obj.coord[0] && coordY === obj.coord[1]
     );
   }
+  function findCoordIndex(coordX, coordY) {
+    return this.board.findIndex(
+      (obj) => coordX === obj.coord[0] && coordY === obj.coord[1]
+    );
+  }
+
+  const shipList = [];
+  createShipListItem('carrier', 5);
+  createShipListItem('battleship', 4);
+  createShipListItem('cruiser', 3);
+  createShipListItem('submarine', 3);
+  createShipListItem('patrol boat', 2);
+  function createShipListItem(name, length) {
+    const listObj = {};
+    listObj.name = name;
+    listObj.length = length;
+    shipList.push(listObj);
+  }
 
   return {
+    shipList,
     size: gameboardSize,
     board: (function createBoardObj() {
       const arr = [];
@@ -38,7 +57,19 @@ const Gameboard = () => {
           // if gridbox is in the last row
           gridBox.classList.add('grid-box-row-8');
       }
+
+      const radar = createRadar();
+      gameboardDiv.appendChild(radar);
+
       return gameboardDiv;
+
+      function createRadar() {
+        const radar = document.createElement('div');
+        radar.className = 'radar';
+        const radarLine = document.createElement('li');
+        radar.appendChild(radarLine);
+        return radar;
+      }
     })(),
     placeShip(startCoord, length, direction) {
       const [coordX, coordY] = startCoord;
@@ -75,7 +106,7 @@ const Gameboard = () => {
       const result = coordObj.ship ? 'hit' : 'miss';
       if (result === 'hit') coordObj.ship.hit(coordObj.shipPos);
       if (result === 'miss') this.missedShots.push(coord);
-      return result;
+      return { result, coordIndex: findCoordIndex.call(this, coordX, coordY) };
     },
     checkIfAllShipsSunk() {
       const sunkStatus = [];
