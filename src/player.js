@@ -4,7 +4,7 @@ const Player = () => {
   // cpu should try adjacent coordinates if their moves hits
   return {
     attack(gameboard, coord) {
-      gameboard.receiveAttack(coord);
+      return gameboard.receiveAttack(coord);
     },
   };
 };
@@ -25,8 +25,8 @@ const CPU = () => {
       ) {
         coord = generateRandomCoordinates();
       }
-      gameboard.receiveAttack(coord);
-      return coord;
+
+      return gameboard.receiveAttack(coord);
 
       function generateRandomCoordinates() {
         const coordX = Math.floor(Math.random() * 8 + 1);

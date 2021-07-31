@@ -6,11 +6,11 @@ const gameLoop = (() => {
 
   return {
     state: { currentGame: null },
-    startNewGame(opp) {
+    startNewGame(opp, playerGameboard = Gameboard()) {
       const newGame = {};
       const playerObj = {
         actions: Player(),
-        gameboard: Gameboard(),
+        gameboard: playerGameboard,
       };
       const playerTwo =
         opp === 'cpu'

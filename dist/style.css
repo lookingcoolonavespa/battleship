@@ -140,6 +140,21 @@ span.story-text::after {
 .axis-btn {
   margin-bottom: 10px;
 }
+#gameplay {
+  display: flex;
+  flex-direction: column;
+}
+.game {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.game-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .gameboard {
   display: grid;
   grid-template-columns: repeat(var(--gameboard-size), 1fr);
@@ -150,10 +165,19 @@ span.story-text::after {
   height: calc(var(--gameboard-size) * var(--grid-box-size));
 }
 .grid-box {
+  position: relative;
   border-top: 1px solid black;
   border-left: 1px solid black;
   width: var(--grid-box-size);
   height: var(--grid-box-size);
+}
+.grid-box::before {
+  position: absolute;
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  color: #333;
+  top: 50%;
+  left: 50%;
 }
 .grid-box-col-8 {
   border-right: 1px solid black;
@@ -169,6 +193,14 @@ span.story-text::after {
 }
 .grid-box-error {
   background-color: red;
+}
+.grid-box-hit:before {
+  content: '\f276';
+  transform: translateX(-50%) translateY(-70%);
+}
+.grid-box-miss:before {
+  content: '\f057';
+  transform: translateX(-50%) translateY(-60%);
 }
 .hidden {
   position: absolute;

@@ -10,7 +10,7 @@
     <title>Battleships</title>
   </head>
   <body>
-    <section id="start" class="centered">
+    <section id="start" class="centered hidden">
       <h1 class="title story-text type-anime">Battleship</h1>
       <div class="btn-ctn centered">
         <button class="btn text-btn start-btn">Start game</button>
@@ -38,13 +38,16 @@
         Axis : <span id="axis-text">X</span>
       </button>
     </section>
-    <section id="gameplay" class="hidden">
-      <!-- <div class="game-section game-section-player">
-        <div class="gameboard"></div>
+    <section id="gameplay" class="">
+      <div class="instructions"></div>
+      <div class="game">
+        <div class="game-section game-section-player">
+          <div class="gameboard-label">Friendly Waters</div>
+        </div>
+        <div class="game-section game-section-cpu">
+          <div class="gameboard-label">Enemy Waters</div>
+        </div>
       </div>
-      <div class="game-section game-section-cpu">
-        <div class="gameboard"></div>
-      </div> -->
     </section>
   </body>
 </html>

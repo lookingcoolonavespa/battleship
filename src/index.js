@@ -2,6 +2,7 @@ import startSeq from './startSeq.js';
 import commandCenter from './commandCenter.js';
 import helpers from './helpers.js';
 import animate from './animate.js';
+import gameplay from './gameplay.js';
 
 // startSeq events
 const cc = commandCenter;
@@ -24,3 +25,15 @@ startSeq.soundBtns.forEach((btn) =>
 
 // commandCenter events
 cc.axisBtn.addEventListener('click', cc.changeAxis);
+
+// gameplay events
+const currentGame = gameplay.startNewGame('cpu');
+const cpuGameboard = currentGame.playerTwo.gameboard;
+const gridBoxes = cpuGameboard.div.querySelectorAll('.grid-box');
+
+gridBoxes.forEach((box, index) => {
+  box.addEventListener('click', () => {
+    const coord = cpuGameboard.board[index].coord;
+    gameplay.onBoardClick(currentGame, coord, box);
+  });
+});

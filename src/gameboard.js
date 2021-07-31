@@ -1,10 +1,6 @@
 import Ship from './ship.js';
 
 const Gameboard = () => {
-  // should keep track of all missed attacks so they can be displayed
-
-  // should be able to report if all ships have been sunk
-
   const gameboardSize = 10;
 
   function findCoord(coordX, coordY) {
@@ -73,12 +69,13 @@ const Gameboard = () => {
     },
     receiveAttack(coord) {
       const [coordX, coordY] = coord;
-      const coordObj = findCoord.call(this, coordX, coordY);
-      coordObj.ship
-        ? coordObj.ship.hit(coordObj.shipPos)
-        : this.missedShots.push([coordX, coordY]);
-
       this.allShots.push([coordX, coordY]);
+      const coordObj = findCoord.call(this, coordX, coordY);
+
+      const result = coordObj.ship ? 'hit' : 'miss';
+      if (result === 'hit') coordObj.ship.hit(coordObj.shipPos);
+      if (result === 'miss') this.missedShots.push(coord);
+      return result;
     },
     checkIfAllShipsSunk() {
       const sunkStatus = [];
