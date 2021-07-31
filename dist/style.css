@@ -143,11 +143,22 @@ span.story-text::after {
 #gameplay {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+#gameplay .title {
+  /* margin-bottom: auto; */
+}
+#gameplay .instructions {
+  /* margin-top: auto; */
+  margin-bottom: auto;
 }
 .game {
+  width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-evenly;
+  margin-bottom: auto;
 }
 .game-section {
   display: flex;
