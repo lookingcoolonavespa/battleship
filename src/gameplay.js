@@ -1,5 +1,6 @@
 import Gameboard from './gameboard.js';
 import { Player, CPU } from './player.js';
+import Ship from './ship.js';
 
 const gameplay = (() => {
   const ctn = document.getElementById('gameplay');
@@ -19,6 +20,8 @@ const gameplay = (() => {
 
       playerSection.appendChild(playerOne.gameboard.div);
       cpuSection.appendChild(playerTwo.gameboard.div);
+
+      return newGame;
 
       function createNewGameObj() {
         const newGame = {};
@@ -46,28 +49,35 @@ const gameplay = (() => {
 
         return newGame;
       }
-      return newGame;
     },
 
     onBoardClick(game, coord) {
       const currentTurn = game.state.turn;
-      const opposingTurn =
+      let opposingTurn =
         game.state.turn === game.playerOne ? game.playerTwo : game.playerOne;
       const oppGameboardDiv = opposingTurn.gameboard.div;
 
-      handlePlayerTurn();
-      if (game.opp === 'cpu') return setTimeout(handleCpuTurn, 5000);
+      handlePlayerTurn().then(() => {
+        if (game.opp === 'cpu') return setTimeout(handleCpuTurn, 2000);
+      });
 
       function handlePlayerTurn() {
         oppGameboardDiv.style.pointerEvents = 'none';
-        runMissleSeq(currentTurn, opposingTurn.gameboard);
-        game.state.turn = opposingTurn;
+        return new Promise((resolve) => {
+          runMissleSeq(currentTurn, opposingTurn.gameboard).then(() => {
+            game.state.turn = opposingTurn;
+            opposingTurn = game.playerOne;
+            resolve();
+          });
+        });
       }
 
       function handleCpuTurn() {
-        runMissleSeq(game.state.turn, game.playerOne.gameboard);
-        oppGameboardDiv.style.pointerEvents = 'all';
-        game.state.turn = game.playerOne;
+        runMissleSeq(game.state.turn, game.playerOne.gameboard).then(() => {
+          oppGameboardDiv.style.pointerEvents = 'all';
+          game.state.turn = game.playerOne;
+          opposingTurn = game.playerTwo;
+        });
       }
 
       function runMissleSeq(currentTurn, oppGameboard) {
@@ -80,35 +90,48 @@ const gameplay = (() => {
           opposingTurn.gameboard,
           coord
         );
-        setTimeout(() => {
-          result === 'hit'
-            ? onHit(coordIndex)
-            : result === 'miss'
-            ? onMiss(coordIndex)
-            : onSunk(coordIndex);
-          display(result);
-          radarLine.className = '';
-        }, 2000);
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            result === 'hit'
+              ? onHit(coordIndex)
+              : result === 'miss'
+              ? onMiss(coordIndex)
+              : onSunk(coordIndex, opposingTurn.gameboard);
+            display(result);
+            radarLine.className = '';
+            resolve();
+          }, 2000);
+        });
       }
 
       function onHit(coordIndex) {
         const gridBox =
-          game.state.turn.gameboard.div.querySelectorAll('.grid-box')[
-            coordIndex
-          ];
+          opposingTurn.gameboard.div.querySelectorAll('.grid-box')[coordIndex];
         gridBox.classList.add('grid-box-hit');
       }
       function onMiss(coordIndex) {
-        console.log(
-          game.state.turn.gameboard.div.querySelectorAll('.grid-box')[0]
-        );
         const gridBox =
-          game.state.turn.gameboard.div.querySelectorAll('.grid-box')[
-            coordIndex
-          ];
+          opposingTurn.gameboard.div.querySelectorAll('.grid-box')[coordIndex];
         gridBox.classList.add('grid-box-miss');
       }
-      function onSunk(coordIndex) {}
+      function onSunk(coordIndex, gameboard) {
+        const sunkShip = gameboard.board[coordIndex].ship;
+        const sunkShipCoords = sunkShip.whereHit;
+        const sunkShipIndexes = [];
+        sunkShipCoords.forEach((coord) => {
+          const [coordX, coordY] = coord;
+          sunkShipIndexes.push(
+            gameboard.board.findIndex(
+              (obj) => coordX === obj.coord[0] && coordY === obj.coord[1]
+            )
+          );
+        });
+
+        const gridBoxes = gameboard.div.querySelectorAll('.grid-box');
+        sunkShipIndexes.forEach((index) =>
+          gridBoxes[index].classList.replace('grid-box-hit', 'grid-box-sunk')
+        );
+      }
     },
   };
 })();

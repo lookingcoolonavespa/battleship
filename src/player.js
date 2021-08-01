@@ -14,8 +14,7 @@ const CPU = () => {
     attack(gameboard) {
       let coord = generateRandomCoordinates();
       if (gameboard.allShots.length === 0) {
-        gameboard.receiveAttack(coord);
-        return coord;
+        return gameboard.receiveAttack(coord);
       }
       while (
         gameboard.allShots.some(

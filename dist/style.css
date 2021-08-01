@@ -242,6 +242,7 @@ span.story-text::after {
   color: #333;
   top: 50%;
   left: 50%;
+  transform: translate(-50%, -50%);
 }
 .grid-box-col-8 {
   border-right: 1px solid black;
@@ -265,7 +266,9 @@ span.story-text::after {
 }
 .grid-box-miss:before {
   content: '\f057';
-  transform: translateX(-50%) translateY(-50%);
+}
+.grid-box-sunk:before {
+  content: '\f714';
 }
 .hidden {
   position: absolute;
