@@ -10,7 +10,7 @@ const gameplay = (() => {
 
   function display(str) {
     gameInfo.textContent = str;
-    animate.typing(gameInfo);
+    return animate.typing(gameInfo);
   }
 
   return {
@@ -41,6 +41,7 @@ const gameplay = (() => {
               };
 
         if (opp === 'cpu') playerTwo.gameboard.placeShipsRandom();
+        console.log(playerTwo.gameboard.ships);
         newGame.playerOne = playerOne;
         newGame.playerTwo = playerTwo;
         const turn = newGame.playerOne;
@@ -82,8 +83,8 @@ const gameplay = (() => {
 
       function runMissleSeq(currentTurn, oppGameboard) {
         game.state.turn === game.playerTwo && game.opp === 'cpu'
-          ? display('missile incoming')
-          : display('sending missile');
+          ? display('Enemy missile incoming')
+          : display('Launching missile');
         const radarLine = oppGameboard.div.querySelector('li');
         animate.fadeIn(radarLine, 1);
 
@@ -105,19 +106,23 @@ const gameplay = (() => {
         });
       }
       function onHit(coordIndex) {
-        game.state.turn === game.playerTwo && game.opp === 'cpu'
-          ? display(
-              `Our ${game.playerOne.gameboard.board[coordIndex].ship.name} has been hit`
-            )
-          : display('Hit confirmed');
+        return new Promise((resolve) => {
+          game.state.turn === game.playerTwo && game.opp === 'cpu'
+            ? display(
+                `Our ${game.playerOne.gameboard.board[coordIndex].ship.name} has been hit`
+              ).then(() => resolve())
+            : display('Hit confirmed').then(() => resolve);
 
-        const gridBox =
-          opposingTurn.gameboard.div.querySelectorAll('.grid-box')[coordIndex];
-        gridBox.classList.add('grid-box-hit');
+          const gridBox =
+            opposingTurn.gameboard.div.querySelectorAll('.grid-box')[
+              coordIndex
+            ];
+          gridBox.classList.add('grid-box-hit');
+        });
       }
       function onMiss(coordIndex) {
         game.state.turn === game.playerTwo && game.opp === 'cpu'
-          ? display('Enemy missile missed')
+          ? display('No collision')
           : display('No collision');
 
         const gridBox =
