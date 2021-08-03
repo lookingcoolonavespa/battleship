@@ -1,7 +1,9 @@
-const Ship = (length) => {
+const Ship = (name, length) => {
   return {
+    name,
     length,
     sunk: false,
+    coords: [],
     whereHit: [],
     hit(pos) {
       this.whereHit.push(pos);

@@ -71,7 +71,7 @@ const Gameboard = () => {
         return radar;
       }
     })(),
-    placeShip(startCoord, length, direction) {
+    placeShip(name, length, startCoord, direction) {
       const [coordX, coordY] = startCoord;
       if (
         (length + coordX > gameboardSize && direction === 'x') ||
@@ -88,9 +88,12 @@ const Gameboard = () => {
         shipCoords.push(coord);
       }
       if (shipCoords.some((coordObj) => coordObj.ship) === true) return null; // check if there is a ship on any of the coordinates
-      const ship = Ship(length);
+      const ship = Ship(name, length);
       this.ships.push(ship);
-      shipCoords.forEach((coord) => (coord.ship = ship));
+      shipCoords.forEach((coord) => {
+        ship.coords.push(coord);
+        coord.ship = ship;
+      });
       return ship;
     },
     receiveAttack(coord) {
@@ -103,7 +106,6 @@ const Gameboard = () => {
         coordObj.ship.hit(coordObj.coord);
       }
       if (result === 'hit' && coordObj.ship.isSunk()) result = 'sunk';
-
       if (result === 'miss') this.missedShots.push(coord);
       return { result, coordIndex: findCoordIndex.call(this, coordX, coordY) };
     },
@@ -117,7 +119,10 @@ const Gameboard = () => {
       this.shipList.forEach((ship) => {
         let rdmCoord = generateRdmCoord();
         let rdmDirection = generateRdmDirection();
-        while (this.placeShip(rdmCoord, ship.length, rdmDirection) === null) {
+        while (
+          this.placeShip(ship.name, ship.length, rdmCoord, rdmDirection) ===
+          null
+        ) {
           rdmCoord = generateRdmCoord();
           rdmDirection = generateRdmDirection();
         }
