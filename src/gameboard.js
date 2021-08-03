@@ -65,9 +65,11 @@ const Gameboard = () => {
 
       function createRadar() {
         const radar = document.createElement('div');
-        radar.className = 'radar';
+        radar.classList.add('radar');
         const radarLine = document.createElement('li');
+        radarLine.classList.add('radar-line');
         radar.appendChild(radarLine);
+        radarLine.style.opacity = 0;
         return radar;
       }
     })(),
@@ -109,10 +111,7 @@ const Gameboard = () => {
       return { result, coordIndex: findCoordIndex.call(this, coordX, coordY) };
     },
     checkIfAllShipsSunk() {
-      const sunkStatus = [];
-      this.ships.forEach((ship) => sunkStatus.push(ship.isSunk()));
-
-      return sunkStatus.every((val) => val === true);
+      return this.ships.every((ship) => ship.sunk === true);
     },
     placeShipsRandom() {
       this.shipList.forEach((ship) => {
