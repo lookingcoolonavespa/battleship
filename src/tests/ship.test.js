@@ -3,13 +3,13 @@ import { test } from 'jest-circus';
 import Ship from '../ship.js';
 
 it('hit() updates whereHit', () => {
-  const ship = Ship(5);
+  const ship = Ship('carrier', 5);
   ship.hit(2);
   expect(ship.whereHit[0]).toBe(2);
 });
 
 it('isSunk() marks sunk when all positions have been hit', () => {
-  const ship = Ship(5);
+  const ship = Ship('carrier', 5);
   ship.hit(1);
   ship.hit(2);
   ship.hit(3);
@@ -19,7 +19,7 @@ it('isSunk() marks sunk when all positions have been hit', () => {
 });
 
 it('isSunk() doesnt send false positives', () => {
-  const ship = Ship(5);
+  const ship = Ship('carrier', 5);
   ship.hit(1);
   ship.hit(2);
   ship.hit(3);

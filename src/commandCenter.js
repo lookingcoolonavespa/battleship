@@ -64,8 +64,9 @@ const commandCenter = (() => {
 
             const shipStartCoord = playerGameboard.board[shiplineStart].coord;
             playerGameboard.placeShip(
-              shipStartCoord,
+              name,
               length,
+              shipStartCoord,
               state.axis.toLowerCase()
             );
             return resolve();

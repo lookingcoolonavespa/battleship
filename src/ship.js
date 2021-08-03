@@ -9,8 +9,13 @@ const Ship = (name, length) => {
       this.whereHit.push(pos);
     },
     isSunk() {
-      this.sunk = this.whereHit.length === this.length;
+      this.sunk = isEqual(this.whereHit, this.coords);
       return this.sunk;
+
+      function isEqual(arrOne, arrTwo) {
+        if (arrOne.length !== arrTwo.length) return false;
+        return arrOne.every((val, index) => val === arrTwo[index]);
+      }
     },
   };
 };

@@ -90,9 +90,9 @@ const Gameboard = () => {
       if (shipCoords.some((coordObj) => coordObj.ship) === true) return null; // check if there is a ship on any of the coordinates
       const ship = Ship(name, length);
       this.ships.push(ship);
-      shipCoords.forEach((coord) => {
-        ship.coords.push(coord);
-        coord.ship = ship;
+      shipCoords.forEach((coordObj) => {
+        ship.coords.push(coordObj.coord);
+        coordObj.ship = ship;
       });
       return ship;
     },
@@ -100,7 +100,6 @@ const Gameboard = () => {
       const [coordX, coordY] = coord;
       this.allShots.push([coordX, coordY]);
       const coordObj = findCoord.call(this, coordX, coordY);
-
       let result = coordObj.ship ? 'hit' : 'miss';
       if (result === 'hit') {
         coordObj.ship.hit(coordObj.coord);
