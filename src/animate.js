@@ -1,7 +1,7 @@
 import audio from './audio.js';
 
 const animate = (() => ({
-  typing: function (el) {
+  typing: function (el, duration) {
     let index = 0;
     const str = el.textContent.trim();
     return new Promise((resolve) => {
@@ -12,7 +12,7 @@ const animate = (() => ({
         if (letter.length === str.length) {
           el.classList.add('type-anime');
           audio.typing.pause();
-          return setTimeout(() => resolve(), 2000);
+          return setTimeout(() => resolve(), duration);
         }
         setTimeout(showNextLetter, 80);
       })();

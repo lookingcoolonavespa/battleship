@@ -38,7 +38,7 @@ const commandCenter = (() => {
           shipNameEl.textContent = '';
           setTimeout(() => {
             shipNameEl.textContent = name;
-            animate.typing(shipNameEl);
+            animate.typing(shipNameEl, 2000);
           }, 300);
 
           gridBoxes.forEach((gridBox) => {
@@ -148,7 +148,7 @@ const commandCenter = (() => {
         instructions.textContent =
           'Admiral, all ships deployed. Preparing to engage enemy';
         instructions.classList.add('story-text');
-        return animate.typing(instructions);
+        return animate.typing(instructions, 2000);
       }
     },
     changeAxis() {

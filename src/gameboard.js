@@ -105,7 +105,6 @@ const Gameboard = () => {
       let result = coordObj.ship ? 'hit' : 'miss';
       if (result === 'hit') {
         coordObj.ship.hit(coordObj.coord);
-        console.log(coordObj.ship.whereHit, coordObj.ship.coords);
       }
       if (result === 'hit' && coordObj.ship.isSunk()) result = 'sunk';
       if (result === 'miss') this.missedShots.push(coord);

@@ -31,17 +31,17 @@ const startSeq = (function () {
         .then(() => {
           helpers.hide(title);
           helpers.show(storyPt1);
-          return animate.typing(storyPt1);
+          return animate.typing(storyPt1, 2000);
         })
         .then(() => {
           helpers.hide(storyPt1);
           helpers.show(storyPt2);
-          return animate.typing(storyPt2);
+          return animate.typing(storyPt2, 2000);
         })
         .then(() => {
           helpers.hide(storyPt2);
           helpers.show(storyPt3);
-          return animate.typing(storyPt3);
+          return animate.typing(storyPt3, 2000);
         })
         .then(() => {
           return animate.fadeOut(start, 3);

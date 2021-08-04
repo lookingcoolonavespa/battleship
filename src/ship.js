@@ -14,7 +14,10 @@ const Ship = (name, length) => {
 
       function isEqual(arrOne, arrTwo) {
         if (arrOne.length !== arrTwo.length) return false;
-        return arrOne.every((val, index) => val === arrTwo[index]);
+        return arrOne.every(
+          (val, index) =>
+            val[0] === arrTwo[index][0] && val[1] === arrTwo[index][1]
+        );
       }
     },
   };
