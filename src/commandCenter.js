@@ -67,18 +67,12 @@ const commandCenter = (() => {
                 length,
                 shipStartCoord,
                 state.axis.toLowerCase()
-              ) === null
+              ) === null // check for if ship placement is invalid
             )
               return;
 
-            function placeShipSvg() {
-              const ctn = document.createElement('div');
-              const svg = document.createElement('svg');
-            }
-
             shiplineIndexes.forEach((index) => {
-              if (index === 0)
-                gridBoxes[index].classList.add(`grid-box-${name}`);
+              // gridBoxes[index].classList.add(`grid-box-${name}`);
               gridBoxes[index].classList.add('grid-box-ship');
             });
 

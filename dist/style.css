@@ -234,6 +234,10 @@ span.story-text::after {
   border-left: 1px solid black;
   width: var(--grid-box-size);
   height: var(--grid-box-size);
+  cursor: crosshair;
+}
+.opp-gameboard .grid-box:hover {
+  background-color: rgb(133, 133, 133);
 }
 .grid-box::before {
   position: absolute;
@@ -251,20 +255,13 @@ span.story-text::after {
   border-bottom: 1px solid black;
 }
 .grid-box-shipline {
-  background-color: black;
+  background-color: rgb(133, 133, 133);
 }
 .grid-box-ship {
-  background-color: green;
-}
-.grid-box-carrier {
-  background: url(/dist/icons/battleships/carrier.svg);
-  background-size: calc(var(--grid-box-size) * 5) var(--grid-box-size);
-  background-position: center;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
+  background-color: rgb(90, 184, 90);
 }
 .grid-box-error {
-  background-color: red;
+  background-color: var(--alert-red);
 }
 .grid-box-hit:before {
   content: '\f192';

@@ -236,10 +236,21 @@ const gameplay = (() => {
     },
     startNewGame(playerOneGameboard) {
       const currentGame = this.createGame('cpu', playerOneGameboard);
+      const playerGameboard = currentGame.playerOne.gameboard;
       const cpuGameboard = currentGame.playerTwo.gameboard;
-      const gridBoxes = cpuGameboard.div.querySelectorAll('.grid-box');
+      cpuGameboard.div.classList.add('opp-gameboard');
+      const cpuGridBoxes = cpuGameboard.div.querySelectorAll('.grid-box');
 
-      gridBoxes.forEach((box, index) => {
+      const shipIndexes = []; // need to color in ship coordinates
+      playerGameboard.board.forEach((coordObj, index) => {
+        coordObj.ship && shipIndexes.push(index);
+      });
+      const playerGridBoxes = playerGameboard.div.querySelectorAll('.grid-box');
+      shipIndexes.forEach((index) =>
+        playerGridBoxes[index].classList.add('.grid-box-ship')
+      );
+
+      cpuGridBoxes.forEach((box, index) => {
         box.addEventListener('click', () => {
           const coord = cpuGameboard.board[index].coord;
           gameplay.onBoardClick(currentGame, coord, box);

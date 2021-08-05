@@ -42,6 +42,6 @@ function quickStart(pageClose) {
       helpers.hide(cc.ctn);
       helpers.show(gameplay.ctn);
       animate.fadeIn(gameplay.ctn, 3);
-      gameplay.startNewGame(cc.playerGameboard);
+      gameplay.startNewGame(playerGameboard);
     });
 }

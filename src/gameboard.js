@@ -49,7 +49,7 @@ const Gameboard = () => {
 
       for (let i = 1; i < Math.pow(gameboardSize, 2) + 1; i++) {
         const gridBox = document.createElement('div');
-        gridBox.classList.add('grid-box');
+        gridBox.classList.add('grid-box', 'grid-box-carrier');
         gameboardDiv.appendChild(gridBox);
 
         if (i % gameboardSize === 0) gridBox.classList.add('grid-box-col-8'); // if gridbox is in the last column
@@ -108,7 +108,11 @@ const Gameboard = () => {
       }
       if (result === 'hit' && coordObj.ship.isSunk()) result = 'sunk';
       if (result === 'miss') this.missedShots.push(coord);
-      return { result, coordIndex: findCoordIndex.call(this, coordX, coordY) };
+      return {
+        result,
+        coord,
+        coordIndex: findCoordIndex.call(this, coordX, coordY),
+      };
     },
     checkIfAllShipsSunk() {
       return this.ships.every((ship) => ship.sunk === true);
