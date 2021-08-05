@@ -22,7 +22,6 @@ const gameplay = (() => {
 
       (function removeOldGameboards() {
         const oldGameboardDivs = [...ctn.querySelectorAll('.gameboard')];
-        console.log(oldGameboardDivs);
         oldGameboardDivs.forEach((div) => ctn.remove(div));
       })();
 
@@ -68,6 +67,7 @@ const gameplay = (() => {
       let opposingTurn =
         game.state.turn === game.playerOne ? game.playerTwo : game.playerOne;
       const oppGameboardDiv = opposingTurn.gameboard.div;
+
       handlePlayerTurn().then(() => {
         if (game.opp === 'cpu') return setTimeout(handleCpuTurn, 1500);
       });
@@ -242,9 +242,9 @@ const gameplay = (() => {
       const cpuGridBoxes = cpuGameboard.div.querySelectorAll('.grid-box');
 
       const shipIndexes = []; // need to color in ship coordinates
-      playerGameboard.board.forEach((coordObj, index) => {
-        coordObj.ship && shipIndexes.push(index);
-      });
+      playerGameboard.board.forEach(
+        (coordObj, index) => coordObj.ship && shipIndexes.push(index)
+      );
       const playerGridBoxes = playerGameboard.div.querySelectorAll('.grid-box');
       shipIndexes.forEach((index) =>
         playerGridBoxes[index].classList.add('.grid-box-ship')
@@ -253,7 +253,7 @@ const gameplay = (() => {
       cpuGridBoxes.forEach((box, index) => {
         box.addEventListener('click', () => {
           const coord = cpuGameboard.board[index].coord;
-          gameplay.onBoardClick(currentGame, coord, box);
+          gameplay.onBoardClick(currentGame, coord);
         });
       });
     },

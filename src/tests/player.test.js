@@ -35,7 +35,7 @@ it('generateCoordsOnHit() generates 4 coords', () => {
   cpu.attack(playerGameboard, [1, 1]);
 
   const expected = {
-    hitCoord: [1, 1],
+    originalHitCoord: [1, 1],
     left: [0, 1],
     right: [2, 1],
     up: [1, 0],
@@ -104,5 +104,33 @@ it('cpu attacks random coord after ship sinks', () => {
   cpu.attack(playerGameboard);
   cpu.attack(playerGameboard);
   cpu.attack(playerGameboard);
-  console.log(cpu.attack(playerGameboard));
+  cpu.attack(playerGameboard);
+});
+
+it('cpu attacks coords in opposite direction to hit ship as well', () => {
+  const playerGameboard = Gameboard();
+  playerGameboard.placeShip('carrier', 5, [1, 1], 'x');
+  const cpu = CPU();
+  cpu.attack(playerGameboard, [2, 1]);
+  cpu.attack(playerGameboard, [3, 1]);
+  cpu.attack(playerGameboard);
+  cpu.attack(playerGameboard);
+  cpu.attack(playerGameboard);
+  cpu.attack(playerGameboard);
+
+  expect(playerGameboard.ships[0].sunk).toBeTruthy();
+});
+
+it('cpu attacks coords in opposite direction after miss', () => {
+  const playerGameboard = Gameboard();
+  playerGameboard.placeShip('carrier', 5, [1, 1], 'x');
+  const cpu = CPU();
+  cpu.attack(playerGameboard, [3, 1]);
+  cpu.attack(playerGameboard, [4, 1]);
+  cpu.attack(playerGameboard);
+  cpu.attack(playerGameboard);
+  cpu.attack(playerGameboard);
+  cpu.attack(playerGameboard);
+
+  expect(playerGameboard.ships[0].sunk).toBeTruthy();
 });

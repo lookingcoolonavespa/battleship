@@ -4,18 +4,19 @@ import helpers from './helpers.js';
 import animate from './animate.js';
 import gameplay from './gameplay.js';
 import endgame from './endGame.js';
-
+import soundBtns from './soundBtns.js';
+// sound buttons
+soundBtns.btns.forEach((btn) =>
+  btn.addEventListener('click', (e) => {
+    soundBtns.turnVol(e);
+    soundBtns.changeVolBtn(e);
+  })
+);
 // startSeq events
 const cc = commandCenter;
 startSeq.startBtn.addEventListener('click', () => {
   startSeq.startMission().then(() => quickStart());
 });
-startSeq.soundBtns.forEach((btn) =>
-  btn.addEventListener('click', (e) => {
-    startSeq.turnVol(e);
-    startSeq.changeVolBtn(e);
-  })
-);
 
 startSeq.quickStartBtn.addEventListener('click', () =>
   animate.fadeOut(startSeq.start, 1).then(() => quickStart(startSeq.start))
@@ -27,6 +28,8 @@ cc.axisBtn.addEventListener('click', cc.changeAxis);
 endgame.newGameBtn.addEventListener('click', () => {
   animate.fadeOut(endgame.ctn, 1).then(() => quickStart(endgame.ctn));
 });
+
+gameplay.startNewGame();
 
 function quickStart(pageClose) {
   if (pageClose) helpers.hide(pageClose);

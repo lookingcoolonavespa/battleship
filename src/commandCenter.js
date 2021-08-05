@@ -9,6 +9,7 @@ const commandCenter = (() => {
 
   const axisBtn = ctn.querySelector('.axis-btn');
   const axisText = axisBtn.querySelector('#axis-text');
+  const gameboardSec = ctn.querySelector('.gameboard-section');
   const state = {
     axis: axisText.textContent,
   };
@@ -21,7 +22,7 @@ const commandCenter = (() => {
       const newGameboardDiv = playerGameboard.div;
       const oldGameboardDiv = ctn.querySelector('.gameboard');
       if (oldGameboardDiv) ctn.remove(oldGameboardDiv);
-      ctn.appendChild(newGameboardDiv);
+      gameboardSec.appendChild(newGameboardDiv);
       return playerGameboard;
     },
     placeShipSeq(gameboard, iterator = 0) {
@@ -45,6 +46,7 @@ const commandCenter = (() => {
         return new Promise((resolve) => {
           if (shipNameEl.textContent) audio.backspace.play();
           shipNameEl.textContent = '';
+
           setTimeout(() => {
             shipNameEl.textContent = name;
             animate.typing(shipNameEl, 2000);
@@ -55,6 +57,7 @@ const commandCenter = (() => {
             gridBox.onmouseleave = (e) => shipline('hide', e);
             gridBox.onclick = (e) => placeShip.call(this, e);
           });
+
           function placeShip(e) {
             const shiplineStart = gridBoxes.findIndex(
               (gridBox) => gridBox === e.target
