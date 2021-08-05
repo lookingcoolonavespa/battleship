@@ -4,6 +4,7 @@ const animate = (() => ({
   typing: function (el, duration) {
     let index = 0;
     const str = el.textContent.trim();
+    audio.typing.currentTime = 0;
     return new Promise((resolve) => {
       (function showNextLetter() {
         const letter = str.slice(0, index++);
@@ -40,6 +41,10 @@ const animate = (() => ({
   },
   fadeOut: function (el, duration) {
     return new Promise((resolve) => {
+      const oldFadeClass = [...el.classList].find((str) =>
+        str.includes('fade-anime')
+      );
+      el.classList.remove(oldFadeClass);
       el.classList.add(`fade-anime-${duration}`);
       el.style.opacity = '0';
       el.addEventListener('transitionend', transitionEnded);
@@ -53,6 +58,10 @@ const animate = (() => ({
   },
   fadeIn: function (el, duration) {
     return new Promise((resolve) => {
+      const oldFadeClass = [...el.classList].find((str) =>
+        str.includes('fade-anime')
+      );
+      el.classList.remove(oldFadeClass);
       el.classList.add(`fade-anime-${duration}`);
       el.style.opacity = '1';
       el.addEventListener('transitionend', transitionEnded);

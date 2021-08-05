@@ -76,8 +76,8 @@ const Gameboard = () => {
     placeShip(name, length, startCoord, direction) {
       const [coordX, coordY] = startCoord;
       if (
-        (length + coordX > gameboardSize && direction === 'x') ||
-        (length + coordY > gameboardSize && direction === 'y')
+        (length + coordX - 1 > gameboardSize && direction === 'x') ||
+        (length + coordY - 1 > gameboardSize && direction === 'y')
       )
         return null;
 
@@ -136,6 +136,14 @@ const Gameboard = () => {
             directions[Math.floor(Math.random() * directions.length)];
           return rdmDirection;
         }
+      });
+    },
+    destroyAllShipsButOne() {
+      this.ships.forEach((ship, index) => {
+        if (index === this.ships.length - 1) return;
+        ship.coords.forEach((coord) => {
+          this.receiveAttack(coord);
+        });
       });
     },
   };

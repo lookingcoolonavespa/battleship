@@ -39,7 +39,7 @@ section {
 }
 .centered .btn-ctn {
   position: absolute;
-  margin-top: 135px;
+  margin-top: 185px;
   row-gap: 20px;
   transition: 0.3s ease-in all;
 }
@@ -149,8 +149,10 @@ span.story-text::after {
   justify-self: center;
 }
 #gameplay .instructions {
+  width: 80%;
   justify-self: center;
   align-self: center;
+  text-align: center;
 }
 .game {
   align-self: flex-start;
@@ -254,6 +256,13 @@ span.story-text::after {
 .grid-box-ship {
   background-color: green;
 }
+.grid-box-carrier {
+  background: url(/dist/icons/battleships/carrier.svg);
+  background-size: calc(var(--grid-box-size) * 5) var(--grid-box-size);
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
 .grid-box-error {
   background-color: red;
 }
@@ -268,11 +277,10 @@ span.story-text::after {
 .grid-box-sunk:before {
   content: '\f714';
 }
-#endgame {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+#endgame .btn-ctn {
+  margin-top: 115px;
 }
+
 .hidden {
   position: absolute;
   opacity: 0;

@@ -18,10 +18,12 @@ const startSeq = (function () {
   const soundBtns = document.querySelectorAll('.sound-btn');
 
   return {
+    start,
     startBtn,
     quickStartBtn,
     soundBtns,
     startMission() {
+      animate.fadeOut(quickStartBtn, 1);
       return animate
         .fadeOut(startBtn, 1)
         .then(() => {

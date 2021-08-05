@@ -2,6 +2,7 @@ import Gameboard from './gameboard.js';
 import { Player, CPU } from './player.js';
 import animate from './animate.js';
 import endgame from './endGame.js';
+import helpers from './helpers.js';
 
 const gameplay = (() => {
   const ctn = document.getElementById('gameplay');
@@ -15,8 +16,15 @@ const gameplay = (() => {
   }
 
   return {
-    startNewGame(opp, playerOneGameboard = Gameboard()) {
+    ctn,
+    createGame(opp, playerOneGameboard = Gameboard()) {
       const newGame = createNewGameObj();
+
+      (function removeOldGameboards() {
+        const oldGameboardDivs = [...ctn.querySelectorAll('.gameboard')];
+        console.log(oldGameboardDivs);
+        oldGameboardDivs.forEach((div) => ctn.remove(div));
+      })();
 
       const { playerOne, playerTwo } = newGame;
       playerSection.appendChild(playerOne.gameboard.div);
@@ -42,7 +50,10 @@ const gameplay = (() => {
               };
 
         if (opp === 'cpu') playerTwo.gameboard.placeShipsRandom();
+
+        playerTwo.gameboard.destroyAllShipsButOne();
         console.log(playerTwo.gameboard.ships);
+
         newGame.playerOne = playerOne;
         newGame.playerTwo = playerTwo;
         const turn = newGame.playerOne;
@@ -52,7 +63,6 @@ const gameplay = (() => {
         return newGame;
       }
     },
-
     onBoardClick(game, coord) {
       const currentTurn = game.state.turn;
       let opposingTurn =
@@ -150,7 +160,7 @@ const gameplay = (() => {
                     const sunkShip =
                       game.playerTwo.gameboard.board[coordIndex].ship;
                     return display(
-                      `Report incoming...enemy ${sunkShip.name} has been taken out `
+                      `Report incoming ... enemy ${sunkShip.name} is down`
                     );
                   }
                 }
@@ -200,23 +210,41 @@ const gameplay = (() => {
       function endGame() {
         const endGameStr =
           game.state.turn === game.playerTwo && game.opp === 'cpu'
-            ? `All ships down. All ships are down. Enemy ships are closing in on position. I repeat enemy ships are closing in. `
-            : 'Last hostile ship taken out. Victory';
+            ? `All ships down. All ships are down. Enemy ships are closing in`
+            : 'Last hostile ship taken out';
 
-        display(endGameStr)
+        display(endGameStr, 2000)
           .then(() => {
-            return animate.fadeOut(ctn);
+            return animate.fadeOut(ctn, 3);
           })
           .then(() => {
-            animate.fadeIn(endgame.ctn);
+            helpers.hide(ctn);
+            helpers.show(endgame.ctn);
+            return animate.fadeIn(endgame.ctn, 1);
+          })
+          .then(() => {
             const endgameStr =
               game.state.turn === game.playerTwo && game.opp === 'cpu'
-                ? ''
-                : '';
-            endgame.display(endgameStr);
-            animate.fadeIn(endgame.newGameBtn);
+                ? 'You lose. Hostile takeover is imminent '
+                : 'You win. Job well done Admiral';
+            endgame.display(endgameStr, 1000).then(() => {
+              helpers.show(endgame.newGameBtn);
+              animate.fadeIn(endgame.newGameBtn, 1);
+            });
           });
       }
+    },
+    startNewGame(playerOneGameboard) {
+      const currentGame = this.createGame('cpu', playerOneGameboard);
+      const cpuGameboard = currentGame.playerTwo.gameboard;
+      const gridBoxes = cpuGameboard.div.querySelectorAll('.grid-box');
+
+      gridBoxes.forEach((box, index) => {
+        box.addEventListener('click', () => {
+          const coord = cpuGameboard.board[index].coord;
+          gameplay.onBoardClick(currentGame, coord, box);
+        });
+      });
     },
   };
 })();

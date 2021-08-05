@@ -4,9 +4,6 @@ import Gameboard from './gameboard.js';
 
 const commandCenter = (() => {
   const ctn = document.getElementById('command-center');
-  const playerGameboard = Gameboard();
-  const map = playerGameboard.div;
-  ctn.appendChild(map);
   const instructions = ctn.querySelector('.instructions');
   const shipNameEl = ctn.querySelector('#ship-name');
 
@@ -19,17 +16,29 @@ const commandCenter = (() => {
   return {
     ctn,
     axisBtn,
-    playerGameboard,
-    placeShipSeq(shipList, iterator = 0) {
-      const gridBoxes = [...map.querySelectorAll('.grid-box')];
+    createNewGameboard() {
+      const playerGameboard = Gameboard();
+      const newGameboardDiv = playerGameboard.div;
+      const oldGameboardDiv = ctn.querySelector('.gameboard');
+      if (oldGameboardDiv) ctn.remove(oldGameboardDiv);
+      ctn.appendChild(newGameboardDiv);
+      return playerGameboard;
+    },
+    placeShipSeq(gameboard, iterator = 0) {
+      const gridBoxes = [...gameboard.div.querySelectorAll('.grid-box')];
       return new Promise((resolve) => {
         iterator < 5
           ? resolve(
-              placeNewShip(shipList[iterator].name, shipList[iterator].length)
+              placeNewShip(
+                gameboard.shipList[iterator].name,
+                gameboard.shipList[iterator].length
+              )
             )
           : resolve();
       }).then(() =>
-        iterator < 5 ? this.placeShipSeq(++iterator) : onDeployedAllShips()
+        iterator < 5
+          ? this.placeShipSeq(gameboard, ++iterator)
+          : onDeployedAllShips()
       );
 
       function placeNewShip(name, length) {
@@ -51,24 +60,28 @@ const commandCenter = (() => {
               (gridBox) => gridBox === e.target
             );
             const shiplineIndexes = figureOutShipline(shiplineStart);
+            const shipStartCoord = gameboard.board[shiplineIndexes[0]].coord;
             if (
-              shiplineIndexes.some((index) =>
-                gridBoxes[index].classList.contains('grid-box-error')
-              )
+              gameboard.placeShip(
+                name,
+                length,
+                shipStartCoord,
+                state.axis.toLowerCase()
+              ) === null
             )
               return;
 
-            shiplineIndexes.forEach((index) =>
-              gridBoxes[index].classList.add('grid-box-ship')
-            );
+            function placeShipSvg() {
+              const ctn = document.createElement('div');
+              const svg = document.createElement('svg');
+            }
 
-            const shipStartCoord = playerGameboard.board[shiplineStart].coord;
-            playerGameboard.placeShip(
-              name,
-              length,
-              shipStartCoord,
-              state.axis.toLowerCase()
-            );
+            shiplineIndexes.forEach((index) => {
+              if (index === 0)
+                gridBoxes[index].classList.add(`grid-box-${name}`);
+              gridBoxes[index].classList.add('grid-box-ship');
+            });
+
             return resolve();
           }
         });
@@ -102,32 +115,30 @@ const commandCenter = (() => {
 
           if (state.axis.toLowerCase() === 'y') {
             const howCloseStartIsFromColumnEnd =
-              (playerGameboard.size ** 2 - // need to figure out the index of the bottom most gridBox in that column
-                playerGameboard.size +
-                (shiplineStart % playerGameboard.size) -
-                (shiplineStart + (length - 1) * playerGameboard.size)) / // this calculates the index of the shipline end
-              playerGameboard.size; // need to divide by column length to see how many rows left to get to the bottom
+              (gameboard.size ** 2 - // need to figure out the index of the bottom most gridBox in that column
+                gameboard.size +
+                (shiplineStart % gameboard.size) -
+                (shiplineStart + (length - 1) * gameboard.size)) / // this calculates the index of the shipline end
+              gameboard.size; // need to divide by column length to see how many rows left to get to the bottom
 
             if (howCloseStartIsFromColumnEnd < 0)
-              shiplineStart +=
-                howCloseStartIsFromColumnEnd * playerGameboard.size;
+              shiplineStart += howCloseStartIsFromColumnEnd * gameboard.size;
 
             shiplineIndexes.push(shiplineStart);
             for (let i = 0; i < length - 1; i++) {
-              const shipCoord = shiplineIndexes[i] + playerGameboard.size;
+              const shipCoord = shiplineIndexes[i] + gameboard.size;
               shiplineIndexes.push(shipCoord);
             }
           }
 
           if (state.axis.toLowerCase() === 'x') {
-            const howCloseStartIsFromRowEnd =
-              shiplineStart % playerGameboard.size;
+            const howCloseStartIsFromRowEnd = shiplineStart % gameboard.size;
             if (
-              (howCloseStartIsFromRowEnd + length) % playerGameboard.size <
+              (howCloseStartIsFromRowEnd + length) % gameboard.size <
               length
             ) {
               shiplineStart -=
-                (howCloseStartIsFromRowEnd + length) % playerGameboard.size;
+                (howCloseStartIsFromRowEnd + length) % gameboard.size;
             }
 
             const shiplineEnd = shiplineStart + length;
