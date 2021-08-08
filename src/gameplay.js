@@ -254,9 +254,10 @@ const gameplay = (() => {
       (function addClickEventToGameboard() {
         const cpuGridBoxes = cpuGameboard.div.querySelectorAll('.grid-box');
         cpuGridBoxes.forEach((box, index) => {
-          box.addEventListener('click', () => {
+          box.addEventListener('click', function onBoxClick() {
             const coord = cpuGameboard.board[index].coord;
             gameplay.onBoardClick(currentGame, coord);
+            box.removeEventListener('click', onBoxClick);
           });
         });
       })();

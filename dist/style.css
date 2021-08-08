@@ -263,6 +263,9 @@ span.story-text::after {
 .grid-box-ship {
   background-color: rgb(90, 184, 90);
 }
+.opp-gameboard .grid-box-sunk:hover,
+.opp-gameboard .grid-box-hit:hover,
+.opp-gameboard .grid-box-miss:hover,
 .grid-box-error {
   background-color: var(--alert-red);
 }
