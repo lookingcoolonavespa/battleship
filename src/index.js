@@ -29,8 +29,6 @@ endgame.newGameBtn.addEventListener('click', () => {
   animate.fadeOut(endgame.ctn, 1).then(() => quickStart(endgame.ctn));
 });
 
-gameplay.startNewGame();
-
 function quickStart(pageClose) {
   if (pageClose) helpers.hide(pageClose);
   const playerGameboard = cc.createNewGameboard();

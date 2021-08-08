@@ -10,162 +10,157 @@ const Player = () => {
 };
 
 const CPU = () => {
-  function generateCoordsOnHit(hitCoord) {
-    const coordsToTryNext = {};
-    coordsToTryNext.originalHitCoord = hitCoord;
-    coordsToTryNext.left = replaceVal(hitCoord, 0, hitCoord[0] - 1);
-    coordsToTryNext.right = replaceVal(hitCoord, 0, hitCoord[0] + 1);
-    coordsToTryNext.up = replaceVal(hitCoord, 1, hitCoord[1] - 1);
-    coordsToTryNext.down = replaceVal(hitCoord, 1, hitCoord[1] + 1);
-    return coordsToTryNext;
-  }
-  function generateCoordsInDirection(coord, direction) {
-    let dirCoord;
-
-    switch (direction) {
-      case 'up': {
-        dirCoord = replaceVal(coord, 1, coord[1] - 1);
-        break;
-      }
-      case 'down': {
-        dirCoord = replaceVal(coord, 1, coord[1] + 1);
-        break;
-      }
-      case 'left': {
-        dirCoord = replaceVal(coord, 0, coord[0] - 1);
-        break;
-      }
-      case 'right': {
-        dirCoord = replaceVal(coord, 0, coord[0] + 1);
-        break;
-      }
-    }
-
-    return dirCoord;
-  }
-
-  function replaceVal(hitCoord, index, val) {
-    const copy = hitCoord.slice(0);
-    copy[index] = val;
-    return copy;
-  }
-
   return {
-    coordsToTryNext: {},
-    attack(gameboard, coord) {
-      coord =
-        coord ||
-        (this.coordsToTryNext.originalHitCoord
-          ? tryNextCoord.call(this)
-          : generateRandomCoordinates());
-
-      if (gameboard.allShots.length === 0) {
-        // don't need to perform illegal move search on first turn
-        const result = gameboard.receiveAttack(coord);
-        process.call(this, result);
-        return result;
-      }
-
-      while (
-        gameboard.allShots.some(
-          (illegalMove) =>
-            illegalMove[0] === coord[0] && illegalMove[1] === coord[1]
-        ) ||
-        !gameboard.board.find(
-          // looking for moves that shoot off the board
-          (coordObj) =>
-            coordObj.coord[0] === coord[0] && coordObj.coord[1] === coord[1]
+    attack(gameboard) {
+      const allCoords = gameboard.board.map((obj) => obj.coord);
+      const availableShots = allCoords.filter((coord) =>
+        gameboard.allShots.every(
+          (shot) => shot[0] !== coord[0] || shot[1] !== coord[1]
         )
-      ) {
-        coord = this.coordsToTryNext.originalHitCoord
-          ? tryNextCoord.call(this)
-          : generateRandomCoordinates();
+      );
+
+      const detectedShipCoords = getDetectedShipCoords();
+      if (detectedShipCoords.length > 0)
+        return gameboard.receiveAttack(
+          getCoordOnSuccessiveHit(detectedShipCoords)
+        );
+
+      if (checkForFirstHit() === true)
+        return gameboard.receiveAttack(getCoordOnFirstHit());
+
+      return gameboard.receiveAttack(getRandomCoord());
+
+      // helper functions
+      function getRandomCoord() {
+        return availableShots[
+          Math.floor(Math.random() * availableShots.length)
+        ];
       }
+      function checkForFirstHit() {
+        return gameboard.ships.some(
+          (ship) => ship.sunk === false && ship.whereHit.length > 0
+        );
+      }
+      function getCoordOnFirstHit() {
+        const hitShip = gameboard.ships.find(
+          (ship) => ship.sunk === false && ship.whereHit.length > 0
+        );
+        const hitCoord = hitShip.whereHit[0];
 
-      const result = gameboard.receiveAttack(coord);
-      process.call(this, result);
-      return result;
-
-      function process(result) {
-        if (result.result === 'sunk')
-          return (this.coordsToTryNext.originalHitCoord = null);
-
-        if (result.result === 'hit' && this.coordsToTryNext.originalHitCoord) {
-          // if successive hit
-          const direction = Object.keys(this.coordsToTryNext)
-            .filter((key) => this.coordsToTryNext[key] !== null)
-            .find(
-              (key) =>
-                this.coordsToTryNext[key][0] === result.coord[0] &&
-                this.coordsToTryNext[key][1] === result.coord[1]
-            ); // look for which direction the ship is pointing towards
-          this.coordsToTryNext[direction] = generateCoordsInDirection(
-            result.coord,
-            direction
-          );
-
-          for (const key in this.coordsToTryNext) {
-            if (key !== direction && key !== 'originalHitCoord')
-              this.coordsToTryNext[key] = null;
-            // remove other directions from possible pool
-          }
-
-          return;
-        }
-
-        if (
-          // looking for miss after successive hits, means you need to shoot in other direction
-          result.result === 'miss' &&
-          this.coordsToTryNext.originalHitCoord &&
-          Object.keys(this.coordsToTryNext).find(
-            (key) => this.coordsToTryNext[key] === null
+        return getCoordToTryNext(hitCoord, 'left', 'right', 'up', 'down');
+      }
+      function getDetectedShipCoords() {
+        const hitShots = gameboard.allShots.filter((coord) =>
+          gameboard.missedShots.every(
+            (shot) => shot[0] !== coord[0] || shot[1] !== coord[1]
           )
-        ) {
-          const direction = Object.keys(this.coordsToTryNext).find(
-            (key) =>
-              this.coordsToTryNext[key] !== null && key !== 'originalHitCoord'
-          );
+        );
+        const sunkShipCoords = gameboard.ships
+          .filter((ship) => ship.sunk === true)
+          .flatMap((ship) => {
+            return ship.coords;
+          });
 
-          let oppositeDirection;
-          switch (direction) {
-            case 'left':
-              oppositeDirection = 'right';
+        const noSunkShots = hitShots.filter((coord) =>
+          sunkShipCoords.every(
+            (sunkCoord) =>
+              sunkCoord[0] !== coord[0] || sunkCoord[1] !== coord[1]
+          )
+        );
+        // need to find adjacent hit shots
+        const detectedShipCoords = noSunkShots.filter(
+          (shot, index, thisArr) =>
+            thisArr.some(
+              (coord) => shot[0] + 1 === coord[0] && shot[1] === coord[1]
+            ) ||
+            thisArr.some(
+              (coord) => shot[0] - 1 === coord[0] && shot[1] === coord[1]
+            ) ||
+            thisArr.some(
+              (coord) => shot[0] === coord[0] && shot[1] + 1 === coord[1]
+            ) ||
+            thisArr.some(
+              (coord) => shot[0] === coord[0] && shot[1] - 1 === coord[1]
+            )
+        );
+
+        return detectedShipCoords.reverse(); // need to reverse so last hit shot is [0]
+      }
+      function getCoordOnSuccessiveHit(detectedShipCoords) {
+        let isAxisX = detectedShipCoords[0][1] === detectedShipCoords[1][1];
+        if (
+          detectedShipCoords.length >= 5 &&
+          detectedShipCoords.every(
+            (coord, index, thisArr) =>
+              thisArr.every((shot) => shot[0] === coord[0]) ||
+              thisArr.every((shot) => shot[1] === coord[1])
+          )
+        )
+          isAxisX = !isAxisX; // means all ships have been hit once along the same axis
+        let coordToTryNext;
+        while (coordToTryNext === undefined) {
+          switch (isAxisX) {
+            case true: {
+              coordToTryNext = getCoordToTryNext(
+                detectedShipCoords[0],
+                'left',
+                'right'
+              );
+              if (coordToTryNext === undefined)
+                // need to go back to original hit coord after missing
+                coordToTryNext = getCoordToTryNext(
+                  detectedShipCoords[detectedShipCoords.length - 1],
+                  'left',
+                  'right'
+                );
+              if (coordToTryNext === undefined) isAxisX = !isAxisX; // means detectedShipCoords show adjacent ships
               break;
-            case 'right':
-              oppositeDirection = 'left';
+            }
+            case false: {
+              coordToTryNext = getCoordToTryNext(
+                detectedShipCoords[0],
+                'up',
+                'down'
+              );
+              if (coordToTryNext === undefined)
+                coordToTryNext = getCoordToTryNext(
+                  detectedShipCoords[detectedShipCoords.length - 1],
+                  'up',
+                  'down'
+                );
+              if (coordToTryNext === undefined) isAxisX = !isAxisX;
               break;
-            case 'up':
-              oppositeDirection = 'down';
-              break;
-            case 'down':
-              oppositeDirection = 'up';
+            }
           }
-
-          return (this.coordsToTryNext[oppositeDirection] =
-            generateCoordsInDirection(
-              this.coordsToTryNext.originalHitCoord,
-              oppositeDirection
-            ));
         }
-
-        if (result.result === 'hit')
-          return (this.coordsToTryNext = generateCoordsOnHit(coord));
+        return coordToTryNext;
       }
 
-      function tryNextCoord() {
-        const keys = Object.keys(this.coordsToTryNext);
+      function getCoordToTryNext(hitCoord, ...directions) {
+        const allDirectionCoords = {
+          left: replaceVal(hitCoord, 0, hitCoord[0] - 1),
+          right: replaceVal(hitCoord, 0, hitCoord[0] + 1),
+          up: replaceVal(hitCoord, 1, hitCoord[1] - 1),
+          down: replaceVal(hitCoord, 1, hitCoord[1] + 1),
+        };
 
-        let rdm = Math.floor(Math.random() * keys.length);
-        while (this.coordsToTryNext[keys[rdm]] === null)
-          rdm = Math.floor(Math.random() * keys.length);
+        const coordsToTryNext = Object.keys(allDirectionCoords)
+          .filter((direction) => directions.includes(direction))
+          .map((direction) => allDirectionCoords[direction])
+          .filter((coord) =>
+            availableShots.some(
+              (shot) => shot[0] === coord[0] && shot[1] === coord[1]
+            )
+          );
+        return coordsToTryNext[
+          Math.floor(Math.random() * coordsToTryNext.length)
+        ];
 
-        return this.coordsToTryNext[keys[rdm]];
-      }
-
-      function generateRandomCoordinates() {
-        const coordX = Math.floor(Math.random() * 8 + 1);
-        const coordY = Math.floor(Math.random() * 8 + 1);
-        return [coordX, coordY];
+        function replaceVal(arr, index, val) {
+          const copy = arr.slice(0);
+          copy[index] = val;
+          return copy;
+        }
       }
     },
   };

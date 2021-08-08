@@ -15,13 +15,10 @@ const startSeq = (function () {
 
   const alert = document.getElementById('alert');
 
-  const soundBtns = document.querySelectorAll('.sound-btn');
-
   return {
     start,
     startBtn,
     quickStartBtn,
-    soundBtns,
     startMission() {
       animate.fadeOut(quickStartBtn, 1);
       return animate
@@ -63,21 +60,6 @@ const startSeq = (function () {
         .then(() => {
           helpers.hide(alert);
         });
-    },
-    turnVol(e) {
-      const icon = e.target;
-      if (icon.classList.contains('fa-volume-up')) {
-        return audio.muteAll();
-      }
-      audio.unmuteAll();
-    },
-    changeVolBtn() {
-      soundBtns.forEach((btn) => {
-        const icon = btn.querySelector('i');
-        icon.classList.contains('fa-volume-up')
-          ? icon.classList.replace('fa-volume-up', 'fa-volume-mute')
-          : icon.classList.replace('fa-volume-mute', 'fa-volume-up');
-      });
     },
   };
 })();

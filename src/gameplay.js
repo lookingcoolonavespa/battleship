@@ -50,9 +50,6 @@ const gameplay = (() => {
 
         if (opp === 'cpu') playerTwo.gameboard.placeShipsRandom();
 
-        playerTwo.gameboard.destroyAllShipsButOne();
-        console.log(playerTwo.gameboard.ships);
-
         newGame.playerOne = playerOne;
         newGame.playerTwo = playerTwo;
         const turn = newGame.playerOne;
