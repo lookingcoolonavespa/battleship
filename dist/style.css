@@ -7,11 +7,11 @@
 
 @font-face {
   font-family: 'Cutive Mono';
-  src: url(./fonts/CutiveMono-Regular.ttf);
+  src: url(/fonts/CutiveMono-Regular.ttf);
 }
 @font-face {
   font-family: 'Work Sans Bold';
-  src: url(./fonts/WorkSans-Bold.ttf);
+  src: url(/fonts/WorkSans-Bold.ttf);
 }
 button {
   background: none;
