@@ -7,11 +7,11 @@
 
 @font-face {
   font-family: 'Cutive Mono';
-  src: url(../battleship/dist/fonts/CutiveMono-Regular.ttf);
+  src: url(./dist/fonts/CutiveMono-Regular.ttf);
 }
 @font-face {
   font-family: 'Work Sans Bold';
-  src: url(../battleship/dist/fonts/WorkSans-Bold.ttf);
+  src: url(./dist/fonts/WorkSans-Bold.ttf);
 }
 button {
   background: none;
