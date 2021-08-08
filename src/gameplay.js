@@ -139,7 +139,7 @@ const gameplay = (() => {
                     const sunkShip =
                       game.playerOne.gameboard.board[coordIndex].ship;
                     return display(
-                      `Mayday Mayday. Our ${sunkShip.name} has been taken out. Our ${sunkShip.name} has been taken out.`
+                      `Mayday Mayday. Our ${sunkShip.name} has been taken out.`
                     );
                   }
                 }
@@ -157,7 +157,7 @@ const gameplay = (() => {
                     const sunkShip =
                       game.playerTwo.gameboard.board[coordIndex].ship;
                     return display(
-                      `Report incoming ... enemy ${sunkShip.name} is down`
+                      `Report incoming ... enemy ${sunkShip.name} down`
                     );
                   }
                 }

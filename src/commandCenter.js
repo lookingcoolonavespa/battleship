@@ -25,20 +25,20 @@ const commandCenter = (() => {
       gameboardSec.appendChild(newGameboardDiv);
       return playerGameboard;
     },
-    placeShipSeq(gameboard, iterator = 0) {
+    placeShipSeq(gameboard, shipNum = 0) {
       const gridBoxes = [...gameboard.div.querySelectorAll('.grid-box')];
       return new Promise((resolve) => {
-        iterator < 5
+        shipNum < 5
           ? resolve(
               placeNewShip(
-                gameboard.shipList[iterator].name,
-                gameboard.shipList[iterator].length
+                gameboard.shipList[shipNum].name,
+                gameboard.shipList[shipNum].length
               )
             )
           : resolve();
       }).then(() =>
-        iterator < 5
-          ? this.placeShipSeq(gameboard, ++iterator)
+        shipNum < 5
+          ? this.placeShipSeq(gameboard, ++shipNum)
           : onDeployedAllShips()
       );
 
@@ -55,10 +55,10 @@ const commandCenter = (() => {
           gridBoxes.forEach((gridBox) => {
             gridBox.onmouseover = (e) => shipline('show', e);
             gridBox.onmouseleave = (e) => shipline('hide', e);
-            gridBox.onclick = (e) => placeShip.call(this, e);
+            gridBox.onclick = (e) => setShip(e);
           });
 
-          function placeShip(e) {
+          function setShip(e) {
             const shiplineStart = gridBoxes.findIndex(
               (gridBox) => gridBox === e.target
             );
@@ -75,7 +75,6 @@ const commandCenter = (() => {
               return;
 
             shiplineIndexes.forEach((index) => {
-              // gridBoxes[index].classList.add(`grid-box-${name}`);
               gridBoxes[index].classList.add('grid-box-ship');
             });
 

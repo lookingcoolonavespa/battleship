@@ -5,6 +5,7 @@ const animate = (() => ({
     let index = 0;
     const str = el.textContent.trim();
     audio.typing.currentTime = 0;
+
     return new Promise((resolve) => {
       (function showNextLetter() {
         const letter = str.slice(0, index++);
@@ -24,6 +25,7 @@ const animate = (() => ({
     let index = str.length - 1;
     el.classList.remove('type-anime');
     audio.backspace.playbackRate = 1.5;
+
     return new Promise((resolve) => {
       (function removeNextLetter() {
         audio.backspace.pause();
@@ -81,6 +83,7 @@ const animate = (() => ({
       audio.fadeIn(audio.alert, 0.02, 0.4, fadeIn);
     }, 200);
     audio.alert.play();
+
     return new Promise((resolve) => {
       setTimeout(() => {
         return resolve();

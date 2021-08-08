@@ -240,7 +240,7 @@ span.story-text::after {
   cursor: crosshair;
 }
 .opp-gameboard .grid-box:hover {
-  background-color: rgb(133, 133, 133);
+  background-color: rgb(192, 192, 192);
 }
 .grid-box::before {
   position: absolute;
