@@ -7,9 +7,9 @@ import endgame from './endGame.js';
 import soundBtns from './soundBtns.js';
 // sound buttons
 soundBtns.btns.forEach((btn) =>
-  btn.addEventListener('click', (e) => {
-    soundBtns.turnVol(e);
-    soundBtns.changeVolBtn(e);
+  btn.addEventListener('click', () => {
+    soundBtns.changeVolBtn();
+    soundBtns.turnVol();
   })
 );
 // startSeq events

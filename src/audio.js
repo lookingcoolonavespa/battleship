@@ -22,6 +22,7 @@ const audio = (() => {
       audio.volume -= step;
     },
     muteAll() {
+      console.log('mute');
       const audioKeys = Object.keys(this);
       audioKeys.forEach((key) => {
         if (typeof audio[key] === 'function') return;
@@ -29,6 +30,7 @@ const audio = (() => {
       });
     },
     unmuteAll() {
+      console.log('unmute');
       const audioKeys = Object.keys(this);
       audioKeys.forEach((key) => {
         if (typeof audio[key] === 'function') return;

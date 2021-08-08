@@ -4,9 +4,9 @@ const soundBtns = (() => {
   const btns = document.querySelectorAll('.sound-btn');
   return {
     btns,
-    turnVol(e) {
-      const icon = e.target;
-      if (icon.classList.contains('fa-volume-up')) {
+    turnVol() {
+      const icon = btns[0].querySelector('i');
+      if (icon.classList.contains('fa-volume-mute')) {
         return audio.muteAll();
       }
       audio.unmuteAll();
