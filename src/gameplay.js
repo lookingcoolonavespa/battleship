@@ -31,6 +31,7 @@ const gameplay = (() => {
 
       return newGame;
 
+      // helper function
       function createNewGameObj() {
         const newGame = {};
         const playerOne = {
@@ -69,6 +70,7 @@ const gameplay = (() => {
         if (game.opp === 'cpu') return setTimeout(handleCpuTurn, 1500);
       });
 
+      // helper functions
       function handlePlayerTurn() {
         oppGameboardDiv.style.pointerEvents = 'none';
 
@@ -236,23 +238,28 @@ const gameplay = (() => {
       const playerGameboard = currentGame.playerOne.gameboard;
       const cpuGameboard = currentGame.playerTwo.gameboard;
       cpuGameboard.div.classList.add('opp-gameboard');
-      const cpuGridBoxes = cpuGameboard.div.querySelectorAll('.grid-box');
 
-      const shipIndexes = []; // need to color in ship coordinates
-      playerGameboard.board.forEach(
-        (coordObj, index) => coordObj.ship && shipIndexes.push(index)
-      );
-      const playerGridBoxes = playerGameboard.div.querySelectorAll('.grid-box');
-      shipIndexes.forEach((index) =>
-        playerGridBoxes[index].classList.add('.grid-box-ship')
-      );
+      (function colorInShipCoords() {
+        const shipIndexes = [];
+        playerGameboard.board.forEach(
+          (coordObj, index) => coordObj.ship && shipIndexes.push(index)
+        );
+        const playerGridBoxes =
+          playerGameboard.div.querySelectorAll('.grid-box');
+        shipIndexes.forEach((index) =>
+          playerGridBoxes[index].classList.add('.grid-box-ship')
+        );
+      })();
 
-      cpuGridBoxes.forEach((box, index) => {
-        box.addEventListener('click', () => {
-          const coord = cpuGameboard.board[index].coord;
-          gameplay.onBoardClick(currentGame, coord);
+      (function addClickEventToGameboard() {
+        const cpuGridBoxes = cpuGameboard.div.querySelectorAll('.grid-box');
+        cpuGridBoxes.forEach((box, index) => {
+          box.addEventListener('click', () => {
+            const coord = cpuGameboard.board[index].coord;
+            gameplay.onBoardClick(currentGame, coord);
+          });
         });
-      });
+      })();
     },
   };
 })();

@@ -42,6 +42,7 @@ const commandCenter = (() => {
           : onDeployedAllShips()
       );
 
+      // helper functions
       function placeNewShip(name, length) {
         return new Promise((resolve) => {
           if (shipNameEl.textContent) audio.backspace.play();

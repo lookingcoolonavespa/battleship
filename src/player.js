@@ -12,12 +12,7 @@ const Player = () => {
 const CPU = () => {
   return {
     attack(gameboard) {
-      const allCoords = gameboard.board.map((obj) => obj.coord);
-      const availableShots = allCoords.filter((coord) =>
-        gameboard.allShots.every(
-          (shot) => shot[0] !== coord[0] || shot[1] !== coord[1]
-        )
-      );
+      const availableShots = getAvailableShots();
 
       const detectedShipCoords = getDetectedShipCoords();
       if (detectedShipCoords.length > 0)
@@ -31,16 +26,27 @@ const CPU = () => {
       return gameboard.receiveAttack(getRandomCoord());
 
       // helper functions
+      function getAvailableShots() {
+        const allCoords = gameboard.board.map((obj) => obj.coord);
+        return allCoords.filter((coord) =>
+          gameboard.allShots.every(
+            (shot) => shot[0] !== coord[0] || shot[1] !== coord[1]
+          )
+        );
+      }
+
       function getRandomCoord() {
         return availableShots[
           Math.floor(Math.random() * availableShots.length)
         ];
       }
+
       function checkForFirstHit() {
         return gameboard.ships.some(
           (ship) => ship.sunk === false && ship.whereHit.length > 0
         );
       }
+
       function getCoordOnFirstHit() {
         const hitShip = gameboard.ships.find(
           (ship) => ship.sunk === false && ship.whereHit.length > 0
@@ -49,6 +55,7 @@ const CPU = () => {
 
         return getCoordToTryNext(hitCoord, 'left', 'right', 'up', 'down');
       }
+
       function getDetectedShipCoords() {
         const hitShots = gameboard.allShots.filter((coord) =>
           gameboard.missedShots.every(
@@ -86,6 +93,7 @@ const CPU = () => {
 
         return detectedShipCoords.reverse(); // need to reverse so last hit shot is [0]
       }
+
       function getCoordOnSuccessiveHit(detectedShipCoords) {
         let isAxisX = detectedShipCoords[0][1] === detectedShipCoords[1][1];
         if (

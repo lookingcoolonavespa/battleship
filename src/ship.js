@@ -16,6 +16,7 @@ const Ship = (name, length) => {
       this.sunk = isEqual(this.whereHit, this.coords);
       return this.sunk;
 
+      // helper function
       function isEqual(arrOne, arrTwo) {
         if (arrOne.length !== arrTwo.length) return false;
         return arrOne.every(
