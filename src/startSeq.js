@@ -27,18 +27,10 @@ const startSeq = (function () {
           btnCtn.classList.add('sound-only');
           return animate.reverseTyping(title);
         })
-        .then(() => {
-          return showNextLine(title, storyPt1);
-        })
-        .then(() => {
-          return showNextLine(storyPt1, storyPt2);
-        })
-        .then(() => {
-          return showNextLine(storyPt2, storyPt3);
-        })
-        .then(() => {
-          return animate.fadeOut(start, 3);
-        })
+        .then(() => showNextLine(title, storyPt1))
+        .then(() => showNextLine(storyPt1, storyPt2))
+        .then(() => showNextLine(storyPt2, storyPt3))
+        .then(() => animate.fadeOut(start, 3))
         .then(() => {
           helpers.hide(start);
           alert.classList.add('fade-anime-3');
@@ -51,9 +43,7 @@ const startSeq = (function () {
           }, 300);
           return animate.fadeOut(alert, 3);
         })
-        .then(() => {
-          helpers.hide(alert);
-        });
+        .then(() => helpers.hide(alert));
 
       function showNextLine(prev, next) {
         helpers.hide(prev);
