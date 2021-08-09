@@ -54,8 +54,8 @@ const commandCenter = (() => {
           }, 300);
 
           gridBoxes.forEach((gridBox) => {
-            gridBox.onmouseover = (e) => shipline('show', e);
-            gridBox.onmouseleave = (e) => shipline('hide', e);
+            gridBox.onmouseover = (e) => toggleShipline('show', e);
+            gridBox.onmouseleave = (e) => toggleShipline('hide', e);
             gridBox.onclick = (e) => setShip(e);
           });
 
@@ -83,7 +83,7 @@ const commandCenter = (() => {
           }
         });
 
-        function shipline(visibility, e) {
+        function toggleShipline(visibility, e) {
           const shiplineStart = gridBoxes.findIndex(
             (gridBox) => gridBox === e.target
           );

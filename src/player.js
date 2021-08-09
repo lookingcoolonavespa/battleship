@@ -20,8 +20,8 @@ const CPU = () => {
           getCoordOnSuccessiveHit(detectedShipCoords)
         );
 
-      if (checkForFirstHit() === true)
-        return gameboard.receiveAttack(getCoordOnFirstHit());
+      const cordOnFirstHit = getCoordOnFirstHit();
+      if (cordOnFirstHit) return gameboard.receiveAttack(getCoordOnFirstHit());
 
       return gameboard.receiveAttack(getRandomCoord());
 
@@ -41,12 +41,6 @@ const CPU = () => {
         ];
       }
 
-      function checkForFirstHit() {
-        return gameboard.ships.some(
-          (ship) => ship.sunk === false && ship.whereHit.length > 0
-        );
-      }
-
       function getCoordOnFirstHit() {
         const hitShip = gameboard.ships.find(
           (ship) => ship.sunk === false && ship.whereHit.length > 0
@@ -64,9 +58,7 @@ const CPU = () => {
         );
         const sunkShipCoords = gameboard.ships
           .filter((ship) => ship.sunk === true)
-          .flatMap((ship) => {
-            return ship.coords;
-          });
+          .flatMap((ship) => ship.coords);
 
         const noSunkShots = hitShots.filter((coord) =>
           sunkShipCoords.every(

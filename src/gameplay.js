@@ -141,7 +141,7 @@ const gameplay = (() => {
                     const sunkShip =
                       game.playerOne.gameboard.board[coordIndex].ship;
                     return display(
-                      `Mayday Mayday. Our ${sunkShip.name} has been taken out.`
+                      `Mayday Mayday. Our ${sunkShip.name} has been taken out`
                     );
                   }
                 }

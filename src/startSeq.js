@@ -19,7 +19,7 @@ const startSeq = (function () {
     start,
     startBtn,
     quickStartBtn,
-    startMission() {
+    async startMission() {
       animate.fadeOut(quickStartBtn, 1);
       return animate
         .fadeOut(startBtn, 1)
@@ -28,19 +28,13 @@ const startSeq = (function () {
           return animate.reverseTyping(title);
         })
         .then(() => {
-          helpers.hide(title);
-          helpers.show(storyPt1);
-          return animate.typing(storyPt1, 2000);
+          return showNextLine(title, storyPt1);
         })
         .then(() => {
-          helpers.hide(storyPt1);
-          helpers.show(storyPt2);
-          return animate.typing(storyPt2, 2000);
+          return showNextLine(storyPt1, storyPt2);
         })
         .then(() => {
-          helpers.hide(storyPt2);
-          helpers.show(storyPt3);
-          return animate.typing(storyPt3, 2000);
+          return showNextLine(storyPt2, storyPt3);
         })
         .then(() => {
           return animate.fadeOut(start, 3);
@@ -60,6 +54,12 @@ const startSeq = (function () {
         .then(() => {
           helpers.hide(alert);
         });
+
+      function showNextLine(prev, next) {
+        helpers.hide(prev);
+        helpers.show(next);
+        return animate.typing(next, 2000);
+      }
     },
   };
 })();

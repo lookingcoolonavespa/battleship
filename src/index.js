@@ -35,9 +35,7 @@ function quickStart(pageClose) {
   helpers.show(cc.ctn);
   animate
     .fadeIn(cc.ctn, 1)
-    .then(() => {
-      return cc.placeShipSeq(playerGameboard);
-    })
+    .then(() => cc.placeShipSeq(playerGameboard))
     .then(() => animate.fadeOut(cc.ctn, 1))
     .then(() => {
       helpers.hide(cc.ctn);
