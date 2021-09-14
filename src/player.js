@@ -45,6 +45,8 @@ const CPU = () => {
         const hitShip = gameboard.ships.find(
           (ship) => ship.sunk === false && ship.whereHit.length > 0
         );
+
+        if (!hitShip) return;
         const hitCoord = hitShip.whereHit[0];
 
         return getCoordToTryNext(hitCoord, 'left', 'right', 'up', 'down');
