@@ -24,7 +24,7 @@ live demo: https://lookingcoolonavespa.github.io/battleship/dist/
 - get more comfortable with jest test suite
 
 ## challenges i faced
-- **Running code sequentially** - This was my first dive into writing promise driven code. I've used promises before to fetch data and display data, but writing promises here was a little different. I had to decide _how_ promises were to resolve (eg. on click?, when the animation ends?) rather than just waiting for a response. 
+**Running code sequentially** - This was my first dive into writing promise driven code. I've used promises before to fetch data and display data, but writing promises here was a little different. I had to decide _how_ promises were to resolve (eg. on click?, when the animation ends?) rather than just waiting for a response. 
 
 For this project I chose .then() chaining over async/await. The syntax just felt more correct and intuitive to me, but it could've been written either way. 
 
